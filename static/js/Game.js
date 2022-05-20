@@ -1,4 +1,5 @@
-import { OrbitControls } from "../js/OrbitControls";
+import { OrbitControls } from "../js/OrbitControls.js";
+import * as THREE from '../js/three.module.js';
 
 class Game {
     constructor() {
@@ -11,7 +12,7 @@ class Game {
         this.scene = new THREE.Scene();
         this.camera = new THREE.PerspectiveCamera(65, window.innerWidth / window.innerHeight, 0.1, 10000);
         this.renderer = new THREE.WebGLRenderer();
-        this.renderer.setClearColor(0xffffff);
+        this.renderer.setClearColor(0x483d8b);
         this.renderer.setSize(window.innerWidth, window.innerHeight);
         document.getElementById("root").append(this.renderer.domElement);
         this.camera.position.set(100, 100, 0);
@@ -30,9 +31,9 @@ class Game {
             side: THREE.DoubleSide,
             //map: new THREE.TextureLoader().load('mats/floor.png'),
             wireframe: false,
-            transparent: false,
-            opacity: 0.3,
-            color: 0x000000
+            transparent: true,
+            opacity: 0.2,
+            color: 0xd2d2d2
         });
         const cube = new THREE.Mesh(geometry, material);
         // cube.position.x = (i * this.size - 35);

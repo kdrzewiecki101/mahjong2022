@@ -1,3 +1,5 @@
 class Net {
 
 }
+
+export { Net }
