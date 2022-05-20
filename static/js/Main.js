@@ -1,3 +1,5 @@
+import { Game } from "../js/Game";
+
 let game;
 let net;
 let ui;
