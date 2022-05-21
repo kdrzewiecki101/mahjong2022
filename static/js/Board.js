@@ -40,8 +40,12 @@ class Board {
             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         ];
-        this.fourthFloor = [1];
-        this.extraFloor = [1, 1]
+        this.fourthFloor = [
+            [1]
+        ];
+        this.extraFloor = [
+            [1, 1]
+        ];
     }
 }
 
