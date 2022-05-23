@@ -1,6 +1,7 @@
 import { OrbitControls } from "../js/OrbitControls.js";
 import { Board } from "../js/Board.js";
 import * as THREE from '../js/three.module.js';
+import { Piece } from "../js/Piece.js";
 
 class Game {
     constructor() {
@@ -10,6 +11,7 @@ class Game {
         this.secondFloor = [];
         this.thirdFloor = [];
         this.fourthFloor = [];
+        this.pieceH = 3.2
         // scena 3D
         this.scene = new THREE.Scene();
         this.scene.background = "../gfx/forest.jpg";
@@ -29,10 +31,10 @@ class Game {
         this.controls.maxDistance = 80;
         this.controls.update();
         this.createBoard();
-        this.createFloor(this.board.zeroFloor, 0);
-        this.createFloor(this.board.firstFloor, 3.2);
-        this.createFloor(this.board.secondFloor, 6.4);
-        this.createFloor(this.board.thirdFloor, 9.6);
+        this.createFloor(this.board.zeroFloor, this.pieceH * 0);
+        this.createFloor(this.board.firstFloor, this.pieceH * 1);
+        this.createFloor(this.board.secondFloor, this.pieceH * 2);
+        this.createFloor(this.board.thirdFloor, this.pieceH * 3);
         this.createTopPiece();
         this.createSidewaysPieces();
         this.render();
@@ -54,55 +56,50 @@ class Game {
         cube.scale.set(75, 3, 75)
         this.scene.add(cube);
     }
-    createFloor = (floor, h) => {
+    createFloor = (floor, pieceH) => {
         for (let i = 0; i < floor.length; i++) {
             for (let j = 0; j < floor[i].length; j++) {
                 if (floor[i][j] == 1) {
-                    const geometry = new THREE.BoxGeometry(1, 1, 2);
-                    // const material = new THREE.MeshBasicMaterial({
-                    //     side: THREE.DoubleSide,
-                    //     //map: new THREE.TextureLoader().load('../gfx/wind1.png'),
-                    //     wireframe: true,
-                    //     transparent: true,
-                    //     opacity: 1,
-                    //     color: 0x000000
-                    // });
-                    const material = new THREE.MeshNormalMaterial({});
-                    const cube = new THREE.Mesh(geometry, material);
-                    cube.position.x = (i * 5 - 17.5);
-                    cube.position.y = (3 + h);
-                    cube.position.z = (j * 5 - 32.5);
-                    cube.scale.set(4.7, 3, 2.3);
-                    this.scene.add(cube);
+                    let playerID = 3
+                    let pieceID = j + "a" + i
+                    const piece = new Piece(playerID, pieceID)
+                    piece.position.x = (i * 5 - 17.5);
+                    piece.position.y = (3 + pieceH);
+                    console.log(pieceH)
+                    piece.position.z = (j * 5 - 32.5);
+                    // piece.scale.set(4.7, 3, 2.3);
+                    this.scene.add(piece);
                 }
             }
         }
     }
     createTopPiece = () => {
-        const geometry = new THREE.BoxGeometry(1, 1, 2);
-        const material = new THREE.MeshNormalMaterial({});
-        const cube = new THREE.Mesh(geometry, material);
-        cube.position.x = (3.5 * 5 - 17.5);
-        cube.position.y = (15.8);
-        cube.position.z = (6.5 * 5 - 32.5);
-        cube.scale.set(4.7, 3, 2.3);
-        this.scene.add(cube);
+        let playerID = 3
+        let pieceID = "bandit"
+        const piece = new Piece(playerID, pieceID)
+        piece.position.x = (3.5 * 5 - 17.5);
+        piece.position.y = (15.8);
+        piece.position.z = (6.5 * 5 - 32.5);
+        // piece.scale.set(4.7, 3, 2.3);
+        this.scene.add(piece);
     }
     createSidewaysPieces = () => {
-        const geometry = new THREE.BoxGeometry(1, 1, 2);
-        const material = new THREE.MeshNormalMaterial({});
-        const cube = new THREE.Mesh(geometry, material);
-        cube.position.x = (3.5 * 5 - 17.5);
-        cube.position.y = (3);
-        cube.position.z = (0 * 5 - 32.5);
-        cube.scale.set(4.7, 3, 2.3);
-        this.scene.add(cube);
-        const cube1 = new THREE.Mesh(geometry, material);
-        cube1.position.x = (3.5 * 5 - 17.5);
-        cube1.position.y = (3);
-        cube1.position.z = (13 * 5 - 32.5);
-        cube1.scale.set(4.7, 3, 2.3);
-        this.scene.add(cube1);
+        let playerID = 3
+        let pieceIDL = "LeftBanditos"
+        const leftPiece = new Piece(playerID, pieceIDL)
+        leftPiece.position.x = (3.5 * 5 - 17.5);
+        leftPiece.position.y = (3);
+        leftPiece.position.z = (13 * 5 - 32.5);
+        // leftPiece.scale.set(4.7, 3, 2.3);
+        this.scene.add(leftPiece);
+
+        let pieceIDR = "RightBanditos"
+        const rightPiece = new Piece(playerID, pieceIDR)
+        rightPiece.position.x = (3.5 * 5 - 17.5);
+        rightPiece.position.y = (3);
+        rightPiece.position.z = (0 * 5 - 32.5);
+        // rightPiece.scale.set(4.7, 3, 2.3);
+        this.scene.add(rightPiece);
     }
     render = () => {
         requestAnimationFrame(this.render);
