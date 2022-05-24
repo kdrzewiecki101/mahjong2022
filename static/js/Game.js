@@ -3,6 +3,9 @@ import { Board } from "../js/Board.js";
 import * as THREE from '../js/three.module.js';
 import { Piece } from "../js/Piece.js";
 
+var zmiennaX = 4.6
+var zmiennaZ = 3.6
+
 class Game {
     constructor() {
         this.floor = [];
@@ -11,7 +14,7 @@ class Game {
         this.secondFloor = [];
         this.thirdFloor = [];
         this.fourthFloor = [];
-        this.pieceH = 3.2
+        this.pieceH = 2.2
         // scena 3D
         this.scene = new THREE.Scene();
         this.scene.background = "../gfx/forest.jpg";
@@ -30,13 +33,13 @@ class Game {
         this.controls.enablePan = false;
         this.controls.maxDistance = 80;
         this.controls.update();
-        this.createBoard();
-        this.createFloor(this.board.zeroFloor, this.pieceH * 0);
-        this.createFloor(this.board.firstFloor, this.pieceH * 1);
-        this.createFloor(this.board.secondFloor, this.pieceH * 2);
-        this.createFloor(this.board.thirdFloor, this.pieceH * 3);
-        this.createTopPiece();
-        this.createSidewaysPieces();
+        // this.createBoard();
+        this.createFloor(this.board.zeroFloor, this.pieceH * 1);
+        this.createFloor(this.board.firstFloor, this.pieceH * 2);
+        this.createFloor(this.board.secondFloor, this.pieceH * 3);
+        this.createFloor(this.board.thirdFloor, this.pieceH * 4);
+        this.createTopPiece(this.pieceH * 5);
+        this.createSidewaysPieces(this.pieceH * 1);
         this.render();
     }
     createBoard = () => {
@@ -63,42 +66,39 @@ class Game {
                     let playerID = 3
                     let pieceID = j + "a" + i
                     const piece = new Piece(playerID, pieceID)
-                    piece.position.x = (i * 5 + 2.5);
-                    piece.position.y = (pieceH + 3); //pieceH + 3
+                    piece.position.x = (i * zmiennaX + 0.5 * zmiennaX);
+                    piece.position.y = (pieceH); //pieceH + 3
                     console.log(pieceH)
-                    piece.position.z = (j * 5 + 2.5);
+                    piece.position.z = (j * zmiennaZ + 0.5 * zmiennaZ);
                     // piece.scale.set(4.7, 3, 2.3);
                     this.scene.add(piece);
                 }
             }
         }
     }
-    createTopPiece = () => {
+    createTopPiece = (pieceH) => {
         let playerID = 3
         let pieceID = "bandit"
         const piece = new Piece(playerID, pieceID)
-        piece.position.x = (3.5 * 5 - 17.5);
-        piece.position.y = (15.8);
+        piece.position.x = (0); //3.5 * 5 - 17.5
+        piece.position.y = (pieceH);
         piece.position.z = (6.5 * 5 - 32.5);
-        // piece.scale.set(4.7, 3, 2.3);
         this.scene.add(piece);
     }
-    createSidewaysPieces = () => {
+    createSidewaysPieces = (pieceH) => {
         let playerID = 3
         let pieceIDL = "LeftBanditos"
         const leftPiece = new Piece(playerID, pieceIDL)
-        leftPiece.position.x = (3.5 * 5 - 17.5);
-        leftPiece.position.y = (3);
-        leftPiece.position.z = (13 * 5 - 32.5);
-        // leftPiece.scale.set(4.7, 3, 2.3);
+        leftPiece.position.x = (0); //3.5 * 5 - 17.5
+        leftPiece.position.y = (pieceH);
+        leftPiece.position.z = (6 * zmiennaZ + 0.5 * zmiennaZ);
         this.scene.add(leftPiece);
 
         let pieceIDR = "RightBanditos"
         const rightPiece = new Piece(playerID, pieceIDR)
-        rightPiece.position.x = (3.5 * 5 - 17.5);
-        rightPiece.position.y = (3);
-        rightPiece.position.z = (0 * 5 - 32.5);
-        // rightPiece.scale.set(4.7, 3, 2.3);
+        rightPiece.position.x = (0); //3.5 * 5 - 17.5
+        rightPiece.position.y = (pieceH);
+        rightPiece.position.z = (-7 * zmiennaZ + 0.5 * zmiennaZ);
         this.scene.add(rightPiece);
     }
     render = () => {
