@@ -59,16 +59,18 @@ class Game {
     }
     createFloor = (floor, pieceH) => {
         for (let i = -4; i < Number(floor.length - 4); i++) {
-            console.log(floor)
-            console.log(floor[Number(i + 4)].length)
+            //console.log(floor)
+            //console.log(floor[Number(i + 4)].length)
             for (let j = -7; j < Number(floor[i + 4].length); j++) {
                 if (floor[i + 4][j + 7] == 1) {
                     let playerID = 3
                     let pieceID = j + "a" + i
-                    const piece = new Piece(playerID, pieceID)
+                    let topMaterialPath = "./gfx/dots2b.png";
+                    const piece = new Piece(playerID, pieceID, topMaterialPath);
+                    console.log(piece);
                     piece.position.x = (i * zmiennaX + 0.5 * zmiennaX);
                     piece.position.y = (pieceH); //pieceH + 3
-                    console.log(pieceH)
+                    //console.log(pieceH)
                     piece.position.z = (j * zmiennaZ + 0.5 * zmiennaZ);
                     // piece.scale.set(4.7, 3, 2.3);
                     this.scene.add(piece);
@@ -79,7 +81,8 @@ class Game {
     createTopPiece = (pieceH) => {
         let playerID = 3
         let pieceID = "bandit"
-        const piece = new Piece(playerID, pieceID)
+        let topMaterialPath = "./gfx/dots2b.png";
+        const piece = new Piece(playerID, pieceID, topMaterialPath);
         piece.position.x = (0); //3.5 * 5 - 17.5
         piece.position.y = (pieceH);
         piece.position.z = (6.5 * 5 - 32.5);
@@ -88,14 +91,14 @@ class Game {
     createSidewaysPieces = (pieceH) => {
         let playerID = 3
         let pieceIDL = "LeftBanditos"
-        const leftPiece = new Piece(playerID, pieceIDL)
+        let topMaterialPath = "./gfx/dots2b.png";
+        const leftPiece = new Piece(playerID, pieceIDL, topMaterialPath)
         leftPiece.position.x = (0); //3.5 * 5 - 17.5
         leftPiece.position.y = (pieceH);
         leftPiece.position.z = (6 * zmiennaZ + 0.5 * zmiennaZ);
         this.scene.add(leftPiece);
-
         let pieceIDR = "RightBanditos"
-        const rightPiece = new Piece(playerID, pieceIDR)
+        const rightPiece = new Piece(playerID, pieceIDR, topMaterialPath)
         rightPiece.position.x = (0); //3.5 * 5 - 17.5
         rightPiece.position.y = (pieceH);
         rightPiece.position.z = (-7 * zmiennaZ + 0.5 * zmiennaZ);
@@ -107,7 +110,6 @@ class Game {
         this.controls.update();
         this.renderer.render(this.scene, this.camera);
     }
-
 }
 
 export { Game };
