@@ -40,7 +40,7 @@ class Game {
         this.render();
     }
     createBoard = () => {
-        const geometry = new THREE.BoxGeometry(1, 1, 1);
+        const geometry = new THREE.BoxGeometry(75, 3, 75);
         const material = new THREE.MeshBasicMaterial({
             side: THREE.DoubleSide,
             // map: new THREE.TextureLoader().load('../gfx/diamond.png'),
@@ -51,22 +51,22 @@ class Game {
             color: 0xd2d2d2
         });
         const cube = new THREE.Mesh(geometry, material);
-        // cube.position.x = (i * this.size - 35);
-        // cube.position.z = (j * this.size - 35);
-        cube.scale.set(75, 3, 75)
+
         this.scene.add(cube);
     }
     createFloor = (floor, pieceH) => {
-        for (let i = 0; i < floor.length; i++) {
-            for (let j = 0; j < floor[i].length; j++) {
-                if (floor[i][j] == 1) {
+        for (let i = -4; i < Number(floor.length - 4); i++) {
+            console.log(floor)
+            console.log(floor[Number(i + 4)].length)
+            for (let j = -7; j < Number(floor[i + 4].length); j++) {
+                if (floor[i + 4][j + 7] == 1) {
                     let playerID = 3
                     let pieceID = j + "a" + i
                     const piece = new Piece(playerID, pieceID)
-                    piece.position.x = (i * 5 - 17.5);
-                    piece.position.y = (3 + pieceH);
+                    piece.position.x = (i * 5 + 2.5);
+                    piece.position.y = (pieceH + 3); //pieceH + 3
                     console.log(pieceH)
-                    piece.position.z = (j * 5 - 32.5);
+                    piece.position.z = (j * 5 + 2.5);
                     // piece.scale.set(4.7, 3, 2.3);
                     this.scene.add(piece);
                 }

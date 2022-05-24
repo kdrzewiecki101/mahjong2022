@@ -5,7 +5,7 @@ class Piece extends THREE.Mesh {
         super() //wywołanie konstruktora klasy
         this.playerID = playerID
         this.pieceID = pieceID
-        this.geometry = new THREE.BoxGeometry(1, 1, 2); //potencjalnie wrzucić w zmienne wielkości
+        this.geometry = new THREE.BoxGeometry(4.5, 2, 3.5); //potencjalnie wrzucić w zmienne wielkości
 
         // this.material = new THREE.MeshBasicMaterial({
         //     // side: THREE.DoubleSide,
