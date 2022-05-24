@@ -3,11 +3,13 @@ import { Board } from "../js/Board.js";
 import * as THREE from '../js/three.module.js';
 import { Piece } from "../js/Piece.js";
 
-var zmiennaX = 4.6
-var zmiennaZ = 3.6
+let zmiennaX = 4.6
+let zmiennaZ = 3.6
 
 class Game {
     constructor() {
+        this.hasGameStarted = false;
+        this.yourLogin
         this.floor = [];
         this.board = new Board();
         this.firstFloor = this.board.zeroFloor;
@@ -25,7 +27,7 @@ class Game {
         this.renderer.setSize(window.innerWidth, window.innerHeight);
         document.getElementById("root").append(this.renderer.domElement);
         this.camera.position.set(100, 100, 0);
-        console.log(this.camera);
+        // console.log(this.camera);
         this.camera.lookAt(this.scene.position);
         this.axes = new THREE.AxesHelper(1000)
         this.scene.add(this.axes);
@@ -42,6 +44,23 @@ class Game {
         this.createSidewaysPieces(this.pieceH * 1);
         this.render();
     }
+
+    start(login) {
+        this.yourLogin = login.id
+        console.log(login.id)
+        console.log("YOUR LOGIN: " + this.yourLogin)
+        if (login.id == 1) {
+            console.log("PIERWSZY")
+        }
+
+        else {
+            console.log("DRUGA")
+        }
+
+
+    }
+
+
     createBoard = () => {
         const geometry = new THREE.BoxGeometry(75, 3, 75);
         const material = new THREE.MeshBasicMaterial({
@@ -59,8 +78,8 @@ class Game {
     }
     createFloor = (floor, pieceH) => {
         for (let i = -4; i < Number(floor.length - 4); i++) {
-            console.log(floor)
-            console.log(floor[Number(i + 4)].length)
+            // console.log(floor)
+            // console.log(floor[Number(i + 4)].length)
             for (let j = -7; j < Number(floor[i + 4].length); j++) {
                 if (floor[i + 4][j + 7] == 1) {
                     let playerID = 3
@@ -68,7 +87,7 @@ class Game {
                     const piece = new Piece(playerID, pieceID)
                     piece.position.x = (i * zmiennaX + 0.5 * zmiennaX);
                     piece.position.y = (pieceH); //pieceH + 3
-                    console.log(pieceH)
+                    // console.log(pieceH)
                     piece.position.z = (j * zmiennaZ + 0.5 * zmiennaZ);
                     // piece.scale.set(4.7, 3, 2.3);
                     this.scene.add(piece);
@@ -103,7 +122,7 @@ class Game {
     }
     render = () => {
         requestAnimationFrame(this.render);
-        console.log("render leci")
+        // console.log("render leci")
         this.controls.update();
         this.renderer.render(this.scene, this.camera);
     }
