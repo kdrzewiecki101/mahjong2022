@@ -42,3 +42,9 @@ app.get("/check", (req, res) => {
     }
 
 })
+
+app.get("/reset", (req, res) => {
+    console.log("reset")
+    users = [];
+    res.send(JSON.stringify({ hasGameStarted: false }))
+})

@@ -48,12 +48,18 @@ class Net {
 
     }
 
-    reset() {
-        console.log("reset")
-        fetch("/reset").then(response => response.text())
-            .then(login => console.log("reset"))
-            .catch(error => console.log(error))
+    reset = async () => {
+        const response = await fetch("/reset")
+
+        if (!response.ok) {
+            return response.status
+        }
+        else {
+            let jsonCheck = await response.json() // response.json
+            return jsonCheck
+        }
     }
+
 }
 
 export { Net }

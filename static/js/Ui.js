@@ -22,9 +22,10 @@ class Ui {
 
     wait(login) {
         if (login.added) {
-            console.log("oczekiwanie na drugiego gracza")
+            // console.log("oczekiwanie na drugiego gracza")
             // this.loginInterface.children.remove() //usunięcie UI w celu zablokowania możliwości
             this.changeStatus.innerHTML = `<h2> Oczekiwanie na drugiego gracza...</h2>`
+            // console.log("HERE::::: " + game.hasGameStarted)
         }
 
         else if (login.id == "error") {
@@ -59,12 +60,14 @@ class Ui {
         clearInterval(this.interval)
         console.log(login)
         game.start(login) //Odpalenie funkcji mówiącej którym graczem będiesz
+        // console.log("ZOBA TU TERA:")
+        // console.log(game.hasGameStarted)
         game.hasGameStarted = true;
+        // console.log("PO ZMIANIE: ")
+        // console.log(game.hasGameStarted)
         this.addiction.remove()
         this.loginInterface.remove()
     }
-
-
 }
 
 export { Ui }
