@@ -24,17 +24,17 @@ class Ui {
         if (login.added) {
             // console.log("oczekiwanie na drugiego gracza")
             // this.loginInterface.children.remove() //usunięcie UI w celu zablokowania możliwości
-            this.changeStatus.innerHTML = `<h2> Oczekiwanie na drugiego gracza...</h2>`
+            this.changeStatus.innerHTML = `<h2>Waiting for other player...</h2>`
             // console.log("HERE::::: " + game.hasGameStarted)
         }
 
         else if (login.id == "error") {
-            console.log("Podany użytkownik już istnieje")
+            alert("Player with this nickname already exists!")
             return
         }
 
         else {
-            console.log("Za duża liczba graczy")
+            alert("Too many players!")
             return
         }
 
