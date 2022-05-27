@@ -35,7 +35,7 @@ class Game {
         this.controls.enablePan = false;
         this.controls.maxDistance = 80;
         this.controls.update();
-        // this.createBoard();
+        this.createBoard();
         this.createFloor(this.board.zeroFloor, this.pieceH * 1);
         this.createFloor(this.board.firstFloor, this.pieceH * 2);
         this.createFloor(this.board.secondFloor, this.pieceH * 3);
@@ -124,6 +124,12 @@ class Game {
         rightPiece.position.y = (pieceH);
         rightPiece.position.z = (-7 * zmiennaZ + 0.5 * zmiennaZ);
         this.scene.add(rightPiece);
+        let pieceIDR2 = "RightBanditos2"
+        const rightPiece2 = new Piece(playerID, pieceIDR2, topMaterialPath)
+        rightPiece2.position.x = (0); //3.5 * 5 - 17.5
+        rightPiece2.position.y = (pieceH);
+        rightPiece2.position.z = (-8 * zmiennaZ + 0.5 * zmiennaZ);
+        this.scene.add(rightPiece2);
     }
     render = () => {
         requestAnimationFrame(this.render);
