@@ -1,5 +1,7 @@
 * {
     box-sizing: border-box;
+    /* margin: 0;
+    padding: 0; */
 }
 
 body {
@@ -23,10 +25,18 @@ body {
     text-align: left;
     font-weight: 700;
     font-size: 25px;
+    z-index: 1000;
 }
 
+#firstTitle,
 h1 {
     text-shadow: 5px 5px 10px #776bc5;
+}
+
+#firstTitle {
+    position: absolute;
+    z-index: 421;
+    margin-left: 30px;
 }
 
 #btns {
@@ -34,18 +44,31 @@ h1 {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    z-index: 1500;
 }
 
 .btn {
     font-family: 'Courier New', Courier, monospace;
-    font-size: 20px;
+    font-size: 1.2em;
     font-weight: 600;
     border-radius: 10px;
     height: 50px;
-    width: 200px;
+    width: 100px;
+    padding: 10px;
     color: #fff;
     background-color: #776bc5;
-    margin-left: 50px;
+}
+
+.inp {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 1.2em;
+    font-weight: 600;
+    border-radius: 10px;
+    height: 50px;
+    width: 350px;
+    padding: 10px;
+    color: #fff;
+    background-color: #776bc5;
 }
 
 .btn:hover {
@@ -55,4 +78,36 @@ h1 {
 #root {
     position: absolute;
     top: 0;
+}
+
+#ui {
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    z-index: 500;
+}
+
+#register {
+    margin-top: 0;
+}
+
+#working {
+    opacity: 100%;
+    text-align: center;
+    position: relative;
+    margin: 0 auto;
+    margin-top: 20vh;
+    border: 2px solid #fff;
+    box-shadow: 0 0 2em #776bc5;
+    padding: 30px;
+    width: 50vw;
+    z-index: 250;
+}
+
+#addiction {
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    z-index: 420;
+    background-color: RGBA(0, 0, 0, 0.7)
 }

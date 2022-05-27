@@ -1,3 +1,4 @@
+console.log("MAIN")
 import { Game } from "../js/Game.js";
 import { Net } from "../js/Net.js";
 import { Ui } from "../js/Ui.js";
@@ -10,3 +11,5 @@ window.onload = () => {
     net = new Net();
     ui = new Ui();
 };
+
+export { game, net, ui }
