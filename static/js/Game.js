@@ -2,9 +2,20 @@ import { OrbitControls } from "../js/OrbitControls.js";
 import { Board } from "../js/Board.js";
 import * as THREE from '../js/three.module.js';
 import { Piece } from "../js/Piece.js";
+import { images, imagesLeft, startImages } from "../js/images.js"
+
+
+//checkImagesLeft()
+
+
+
+
+// console.log(images.length)
+// console.log(images)
 
 let zmiennaX = 4.6
 let zmiennaZ = 3.6
+let imageCounterStrike = 0
 
 class Game {
     constructor() {
@@ -70,6 +81,28 @@ class Game {
 
 
     }
+
+
+
+
+    createBoard = () => {
+        const geometry = new THREE.BoxGeometry(75, 3, 75);
+        const material = new THREE.MeshBasicMaterial({
+            side: THREE.DoubleSide,
+            // map: new THREE.TextureLoader().load('../gfx/diamond.png'),
+            wireframe: false,
+            transparent: true,
+            opacity: 1,
+            // color: 0x000000
+            color: 0xd2d2d2
+        });
+        const cube = new THREE.Mesh(geometry, material);
+
+        this.scene.add(cube);
+    }
+
+
+
     createFloor = (floor, pieceH) => {
         for (let i = -4; i < Number(floor.length - 4); i++) {
 
@@ -77,26 +110,33 @@ class Game {
             //console.log(floor[Number(i + 4)].length)
 
             for (let j = -7; j < Number(floor[i + 4].length); j++) {
+
                 if (floor[i + 4][j + 7] == 1) {
                     let playerID = 3
                     let pieceID = j + "a" + i
-                    let topMaterialPath = "./gfx/dots2b.png";
+                    console.log(j * i + i)
+                    let topMaterialPath = `./gfx/${startImages()[imageCounterStrike]}.png`;
+                    console.log("TOP MATERIAL PATH: " + topMaterialPath)
                     const piece = new Piece(playerID, pieceID, topMaterialPath);
-                    console.log(piece);
+                    // console.log(piece);
                     piece.position.x = (i * zmiennaX + 0.5 * zmiennaX);
                     piece.position.y = (pieceH); //pieceH + 3
 
                     piece.position.z = (j * zmiennaZ + 0.5 * zmiennaZ);
                     // piece.scale.set(4.7, 3, 2.3);
                     this.scene.add(piece);
+                    imageCounterStrike++
                 }
             }
         }
+        console.log(imageCounterStrike)
     }
+
     createTopPiece = (pieceH) => {
         let playerID = 3
         let pieceID = "bandit"
-        let topMaterialPath = "./gfx/dots2b.png";
+        let topMaterialPath = `./gfx/${startImages()[imageCounterStrike]}.png`;
+        imageCounterStrike++
         const piece = new Piece(playerID, pieceID, topMaterialPath);
         piece.position.x = (0); //3.5 * 5 - 17.5
         piece.position.y = (pieceH);
@@ -106,20 +146,25 @@ class Game {
     createSidewaysPieces = (pieceH) => {
         let playerID = 3
         let pieceIDL = "LeftBanditos"
-        let topMaterialPath = "./gfx/dots2b.png";
-        const leftPiece = new Piece(playerID, pieceIDL, topMaterialPath)
+        let topMaterialPathL = `./gfx/${startImages()[imageCounterStrike]}.png`;
+        imageCounterStrike++
+        const leftPiece = new Piece(playerID, pieceIDL, topMaterialPathL)
         leftPiece.position.x = (0); //3.5 * 5 - 17.5
         leftPiece.position.y = (pieceH);
         leftPiece.position.z = (6 * zmiennaZ + 0.5 * zmiennaZ);
         this.scene.add(leftPiece);
         let pieceIDR = "RightBanditos"
-        const rightPiece = new Piece(playerID, pieceIDR, topMaterialPath)
+        let topMaterialPathR = `./gfx/${startImages()[imageCounterStrike]}.png`;
+        imageCounterStrike++
+        const rightPiece = new Piece(playerID, pieceIDR, topMaterialPathR)
         rightPiece.position.x = (0); //3.5 * 5 - 17.5
         rightPiece.position.y = (pieceH);
         rightPiece.position.z = (-7 * zmiennaZ + 0.5 * zmiennaZ);
         this.scene.add(rightPiece);
         let pieceIDR2 = "RightBanditos2"
-        const rightPiece2 = new Piece(playerID, pieceIDR2, topMaterialPath)
+        let topMaterialPathR2 = `./gfx/${startImages()[imageCounterStrike]}.png`;
+        imageCounterStrike++
+        const rightPiece2 = new Piece(playerID, pieceIDR2, topMaterialPathR2)
         rightPiece2.position.x = (0); //3.5 * 5 - 17.5
         rightPiece2.position.y = (pieceH);
         rightPiece2.position.z = (-8 * zmiennaZ + 0.5 * zmiennaZ);
