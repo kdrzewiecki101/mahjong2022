@@ -4,6 +4,7 @@ class Piece extends THREE.Mesh {
         super() //wywołanie konstruktora klasy
         this.playerID = playerID
         this.pieceID = pieceID
+        this.name = "clickable";
         this.topMaterialPath = topMaterialPath;
         this.geometry = new THREE.BoxGeometry(4.5, 2, 3.15); //potencjalnie wrzucić w zmienne wielkości
         this.material = [];
@@ -13,6 +14,10 @@ class Piece extends THREE.Mesh {
         this.material.push(new THREE.MeshBasicMaterial({ side: THREE.DoubleSide, map: new THREE.TextureLoader().load('./gfx/sideb.png') }));
         this.material.push(new THREE.MeshBasicMaterial({ side: THREE.DoubleSide, map: new THREE.TextureLoader().load('./gfx/sideb.png') }));
         this.material.push(new THREE.MeshBasicMaterial({ side: THREE.DoubleSide, map: new THREE.TextureLoader().load('./gfx/sideb.png') }));
+        // this.material = new THREE.MeshBasicMaterial({
+        //     color: 0x00ff00, transparent: false,
+        //     opacity: 1,
+        // });
         //this.material = new THREE.MeshNormalMaterial({});
         this.mesh = new THREE.Mesh(this.geometry, this.material);
     }
