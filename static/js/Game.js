@@ -114,9 +114,10 @@ class Game {
 
                 if (floor[i + 4][j + 7] == 1) {
                     let playerID = 3
-                    let pieceID = j + "a" + i
                     console.log(j * i + i)
-                    let topMaterialPath = `./gfx/${startImages()[imageCounterStrike]}.png`;
+                    let imageOnTopName = startImages()[imageCounterStrike]
+                    let topMaterialPath = `./gfx/${imageOnTopName}.png`;
+                    let pieceID = imageOnTopName
                     console.log("TOP MATERIAL PATH: " + topMaterialPath)
                     const piece = new Piece(playerID, pieceID, topMaterialPath);
                     // console.log(piece);
@@ -135,8 +136,9 @@ class Game {
 
     createTopPiece = (pieceH) => {
         let playerID = 3
-        let pieceID = "bandit"
-        let topMaterialPath = `./gfx/${startImages()[imageCounterStrike]}.png`;
+        let imageOnTopName = startImages()[imageCounterStrike]
+        let topMaterialPath = `./gfx/${imageOnTopName}.png`;
+        let pieceID = imageOnTopName
         imageCounterStrike++
         const piece = new Piece(playerID, pieceID, topMaterialPath);
         piece.position.x = (0); //3.5 * 5 - 17.5
@@ -146,24 +148,28 @@ class Game {
     }
     createSidewaysPieces = (pieceH) => {
         let playerID = 3
-        let pieceIDL = "LeftBanditos"
-        let topMaterialPathL = `./gfx/${startImages()[imageCounterStrike]}.png`;
+        let imageOnTopNameL = startImages()[imageCounterStrike]
+        let topMaterialPathL = `./gfx/${imageOnTopNameL}.png`;
+        let pieceIDL = imageOnTopNameL
         imageCounterStrike++
         const leftPiece = new Piece(playerID, pieceIDL, topMaterialPathL)
         leftPiece.position.x = (0); //3.5 * 5 - 17.5
         leftPiece.position.y = (pieceH);
         leftPiece.position.z = (6 * zmiennaZ + 0.5 * zmiennaZ);
         this.scene.add(leftPiece);
-        let pieceIDR = "RightBanditos"
-        let topMaterialPathR = `./gfx/${startImages()[imageCounterStrike]}.png`;
+
+        let imageOnTopNameR = startImages()[imageCounterStrike]
+        let topMaterialPathR = `./gfx/${imageOnTopNameR}.png`;
+        let pieceIDR = imageOnTopNameR
         imageCounterStrike++
         const rightPiece = new Piece(playerID, pieceIDR, topMaterialPathR)
         rightPiece.position.x = (0); //3.5 * 5 - 17.5
         rightPiece.position.y = (pieceH);
         rightPiece.position.z = (-7 * zmiennaZ + 0.5 * zmiennaZ);
         this.scene.add(rightPiece);
-        let pieceIDR2 = "RightBanditos2"
-        let topMaterialPathR2 = `./gfx/${startImages()[imageCounterStrike]}.png`;
+        let imageOnTopNameR2 = startImages()[imageCounterStrike]
+        let topMaterialPathR2 = `./gfx/${imageOnTopNameR2}.png`;
+        let pieceIDR2 = imageOnTopNameR
         imageCounterStrike++
         const rightPiece2 = new Piece(playerID, pieceIDR2, topMaterialPathR2)
         rightPiece2.position.x = (0); //3.5 * 5 - 17.5
@@ -213,10 +219,12 @@ class Game {
     clickPieces = () => {
         this.raycaster.setFromCamera(this.pointer, this.camera);
         const intersects = this.raycaster.intersectObjects(this.scene.children);
-        console.log(intersects.length)
+        // console.log(intersects.length)
+        console.log(intersects[0].object.pieceID);
+        //console.log(intersects[0].object)
         for (let i = 0; i < intersects.length; i++) {
-            console.log(intersects[0].object.name);
             if (intersects.length > 0 && intersects[0].object.name == "clickable") {
+                // console.log(intersects[0].object.id)
                 intersects[0].object.material = new THREE.MeshBasicMaterial({
                     color: 0x00ff00, transparent: false,
                     opacity: 1,
@@ -230,7 +238,7 @@ class Game {
         this.controls.update();
 
         //skalowanie renderera i kamery
-        console.log(window.innerHeight, window.innerWidth)
+        // console.log(window.innerHeight, window.innerWidth)
 
         this.camera.aspect = window.innerWidth / window.innerHeight;
         this.camera.updateProjectionMatrix();
