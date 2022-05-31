@@ -83,7 +83,7 @@ function startImages() {
             imagesLeft.push(images[i].name)
         }
     }
-    console.log(imagesLeft)
+    //console.log(imagesLeft)
 
     let XXXX = images
 
@@ -105,7 +105,7 @@ function startImages() {
         // console.log(XXXX[rN].name)
 
     }
-    console.log(startingItemsArray)
+    //console.log(startingItemsArray)
     return startingItemsArray
 }
 

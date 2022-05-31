@@ -15,7 +15,10 @@ import { images, imagesLeft, startImages } from "../js/images.js"
 
 let zmiennaX = 4.6
 let zmiennaZ = 3.6
+
+//global helpers
 let imageCounterStrike = 0
+let lastClickedPieceImageObj
 
 class Game {
     constructor() {
@@ -114,11 +117,10 @@ class Game {
 
                 if (floor[i + 4][j + 7] == 1) {
                     let playerID = 3
-                    console.log(j * i + i)
                     let imageOnTopName = startImages()[imageCounterStrike]
                     let topMaterialPath = `./gfx/${imageOnTopName}.png`;
                     let pieceID = imageOnTopName
-                    console.log("TOP MATERIAL PATH: " + topMaterialPath)
+                    //console.log("TOP MATERIAL PATH: " + topMaterialPath)
                     const piece = new Piece(playerID, pieceID, topMaterialPath);
                     // console.log(piece);
                     piece.position.x = (i * zmiennaX + 0.5 * zmiennaX);
@@ -217,21 +219,45 @@ class Game {
         }
     }
     clickPieces = () => {
+        if (lastClickedPieceImageObj != undefined)
+            console.log("ostatnio kliknięty: " + lastClickedPieceImageObj.pieceID)
         this.raycaster.setFromCamera(this.pointer, this.camera);
         const intersects = this.raycaster.intersectObjects(this.scene.children);
         // console.log(intersects.length)
-        console.log(intersects[0].object.pieceID);
-        //console.log(intersects[0].object)
-        for (let i = 0; i < intersects.length; i++) {
-            if (intersects.length > 0 && intersects[0].object.name == "clickable") {
-                // console.log(intersects[0].object.id)
-                intersects[0].object.material = new THREE.MeshBasicMaterial({
-                    color: 0x00ff00, transparent: false,
-                    opacity: 1,
-                });
-                //console.log(intersects[0].object);
+        console.log("teraz clicknięty: " + intersects[0].object.pieceID);
+
+        if (lastClickedPieceImageObj != undefined) {
+            //console.log(intersects[0].object)
+            for (let i = 0; i < intersects.length; i++) {
+                if (intersects.length > 0 && intersects[0].object.name == "clickable" && lastClickedPieceImageObj.pieceID == intersects[0].object.pieceID) { // && lastClickedPieceImageObj.pieceID == intersects[0].object.pieceID
+                    // console.log(intersects[0].object.id)
+                    intersects[0].object.material = new THREE.MeshBasicMaterial({
+                        color: 0x00ff00, transparent: false,
+                        opacity: 1,
+                    });
+
+                    lastClickedPieceImageObj.material = new THREE.MeshBasicMaterial({
+                        color: 0x00ff00, transparent: false,
+                        opacity: 1,
+                    })
+
+                    //Znalezienie ostatnio klikniętego elementu po jego id i podmiana jego mesha jw
+                    // console.log(lastClickedPieceImageObj.id)
+                    // let found = intersects.find(element => element.object.id == lastClickedPieceImageObj.id)
+                    // console.log(found)
+
+                    // lastClickedPieceImageObj.id
+
+
+                    //console.log(intersects[0].object);
+
+                    //Funkcja odpowiedzialna za znalezienie elementów z piec
+                }
             }
         }
+        lastClickedPieceImageObj = intersects[0].object
+        console.log(lastClickedPieceImageObj)
+
     }
     render = () => {
         //console.log("render leci")        
