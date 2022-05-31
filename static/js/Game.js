@@ -85,6 +85,7 @@ class Game {
 
 
 
+
     createBoard = () => {
         const geometry = new THREE.BoxGeometry(75, 3, 75);
         const material = new THREE.MeshBasicMaterial({
@@ -227,6 +228,14 @@ class Game {
     render = () => {
         //console.log("render leci")        
         this.controls.update();
+
+        //skalowanie renderera i kamery
+        console.log(window.innerHeight, window.innerWidth)
+
+        this.camera.aspect = window.innerWidth / window.innerHeight;
+        this.camera.updateProjectionMatrix();
+        this.renderer.setSize(window.innerWidth, window.innerHeight);
+
         this.renderer.render(this.scene, this.camera);
         requestAnimationFrame(this.render);
     }
