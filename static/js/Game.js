@@ -2,16 +2,8 @@ import { OrbitControls } from "../js/OrbitControls.js";
 import { Board } from "../js/Board.js";
 import * as THREE from '../js/three.module.js';
 import { Piece } from "../js/Piece.js";
-import { images, imagesLeft, startImages } from "../js/images.js"
+//import { images, imagesLeft, startImages } from "../js/images.js"
 
-
-//checkImagesLeft()
-
-
-
-
-// console.log(images.length)
-// console.log(images)
 
 let zmiennaX = 4.6
 let zmiennaZ = 3.6
@@ -19,17 +11,20 @@ let zmiennaZ = 3.6
 //global helpers
 let imageCounterStrike = 0
 let lastClickedPieceImageObj
+let cosik = false
 
 class Game {
     constructor() {
         this.hasGameStarted = false;
-        this.yourLogin
+        this.yourLogin;
+        this.yourGameboardImages
         this.floor = [];
         this.board = new Board();
         this.firstFloor = this.board.zeroFloor;
         this.secondFloor = [];
         this.thirdFloor = [];
         this.fourthFloor = [];
+        this.playerID;
         this.pieceH = 2.2;
         this.boards = new THREE.Group();
         // Scena3D
@@ -38,7 +33,7 @@ class Game {
         this.axes = new THREE.AxesHelper(1000)
         this.scene.add(this.axes);
         // Renderer
-        this.renderer = new THREE.WebGLRenderer();
+        this.renderer = new THREE.WebGLRenderer({ antialiasing: true });
         this.renderer.setClearColor(0x483d8b);
         this.renderer.setClearAlpha(0);
         this.renderer.setSize(window.innerWidth, window.innerHeight);
@@ -60,27 +55,47 @@ class Game {
         window.addEventListener('click', this.onPointerClick);
         // Functions
         this.createBoard();
-        this.createFloor(this.board.zeroFloor, this.pieceH * 1);
-        this.createFloor(this.board.firstFloor, this.pieceH * 2);
-        this.createFloor(this.board.secondFloor, this.pieceH * 3);
-        this.createFloor(this.board.thirdFloor, this.pieceH * 4);
-        this.createTopPiece(this.pieceH * 5);
-        this.createSidewaysPieces(this.pieceH * 1);
         this.scene.add(this.boards);
         this.render();
     }
 
-    start(login) {
-        this.yourLogin = login.id
+    start(login, gameboardImagesRandomized) {
+        this.yourLogin = login
+        this.yourGameboardImages = gameboardImagesRandomized
         console.log(login.id)
         console.log("YOUR LOGIN: " + this.yourLogin)
+        console.log("Your gameboard:")
+        console.log(this.yourGameboardImages)
         if (login.id == 1) {
             console.log("PIERWSZY")
+            this.playerID = 1
+            this.createFloor(this.board.zeroFloor, this.pieceH * 1);
+            this.createFloor(this.board.firstFloor, this.pieceH * 2);
+            this.createFloor(this.board.secondFloor, this.pieceH * 3);
+            this.createFloor(this.board.thirdFloor, this.pieceH * 4);
+            this.createTopPiece(this.pieceH * 5);
+            this.createSidewaysPieces(this.pieceH * 1);
         }
 
-        else {
+        else if (login.id == 2) {
             console.log("DRUGA")
+            this.playerID = 2
+            this.createFloor(this.board.zeroFloor, this.pieceH * 1);
+            this.createFloor(this.board.firstFloor, this.pieceH * 2);
+            this.createFloor(this.board.secondFloor, this.pieceH * 3);
+            this.createFloor(this.board.thirdFloor, this.pieceH * 4);
+            this.createTopPiece(this.pieceH * 5);
+            this.createSidewaysPieces(this.pieceH * 1);
         }
+
+        // this.createFloor(this.board.zeroFloor, this.pieceH * 1);
+        // this.createFloor(this.board.firstFloor, this.pieceH * 2);
+        // this.createFloor(this.board.secondFloor, this.pieceH * 3);
+        // this.createFloor(this.board.thirdFloor, this.pieceH * 4);
+        // this.createTopPiece(this.pieceH * 5);
+        // this.createSidewaysPieces(this.pieceH * 1);
+
+        //Wygenerować na podstawie this.gameBoard dla każdego gracza plansze
 
 
     }
@@ -116,12 +131,14 @@ class Game {
             for (let j = -7; j < Number(floor[i + 4].length); j++) {
 
                 if (floor[i + 4][j + 7] == 1) {
-                    let playerID = 3
-                    let imageOnTopName = startImages()[imageCounterStrike]
+                    // let playerID = 3
+                    let imageOnTopName = this.yourGameboardImages[imageCounterStrike]
                     let topMaterialPath = `./gfx/${imageOnTopName}.png`;
                     let pieceID = imageOnTopName
+                    console.log(this.playerID)
+                    console.log(imageCounterStrike)
                     //console.log("TOP MATERIAL PATH: " + topMaterialPath)
-                    const piece = new Piece(playerID, pieceID, topMaterialPath);
+                    const piece = new Piece(this.playerID, pieceID, topMaterialPath);
                     // console.log(piece);
                     piece.position.x = (i * zmiennaX + 0.5 * zmiennaX);
                     piece.position.y = (pieceH); //pieceH + 3
@@ -133,47 +150,45 @@ class Game {
                 }
             }
         }
-        console.log(imageCounterStrike)
+        // console.log(imageCounterStrike)
     }
 
     createTopPiece = (pieceH) => {
-        let playerID = 3
-        let imageOnTopName = startImages()[imageCounterStrike]
+        let imageOnTopName = this.yourGameboardImages[imageCounterStrike]
         let topMaterialPath = `./gfx/${imageOnTopName}.png`;
         let pieceID = imageOnTopName
         imageCounterStrike++
-        const piece = new Piece(playerID, pieceID, topMaterialPath);
+        const piece = new Piece(this.playerID, pieceID, topMaterialPath);
         piece.position.x = (0); //3.5 * 5 - 17.5
         piece.position.y = (pieceH);
         piece.position.z = (6.5 * 5 - 32.5);
         this.scene.add(piece);
     }
     createSidewaysPieces = (pieceH) => {
-        let playerID = 3
-        let imageOnTopNameL = startImages()[imageCounterStrike]
+        let imageOnTopNameL = this.yourGameboardImages[imageCounterStrike]
         let topMaterialPathL = `./gfx/${imageOnTopNameL}.png`;
         let pieceIDL = imageOnTopNameL
         imageCounterStrike++
-        const leftPiece = new Piece(playerID, pieceIDL, topMaterialPathL)
+        const leftPiece = new Piece(this.playerID, pieceIDL, topMaterialPathL)
         leftPiece.position.x = (0); //3.5 * 5 - 17.5
         leftPiece.position.y = (pieceH);
         leftPiece.position.z = (6 * zmiennaZ + 0.5 * zmiennaZ);
         this.scene.add(leftPiece);
 
-        let imageOnTopNameR = startImages()[imageCounterStrike]
+        let imageOnTopNameR = this.yourGameboardImages[imageCounterStrike]
         let topMaterialPathR = `./gfx/${imageOnTopNameR}.png`;
         let pieceIDR = imageOnTopNameR
         imageCounterStrike++
-        const rightPiece = new Piece(playerID, pieceIDR, topMaterialPathR)
+        const rightPiece = new Piece(this.playerID, pieceIDR, topMaterialPathR)
         rightPiece.position.x = (0); //3.5 * 5 - 17.5
         rightPiece.position.y = (pieceH);
         rightPiece.position.z = (-7 * zmiennaZ + 0.5 * zmiennaZ);
         this.scene.add(rightPiece);
-        let imageOnTopNameR2 = startImages()[imageCounterStrike]
+        let imageOnTopNameR2 = this.yourGameboardImages[imageCounterStrike]
         let topMaterialPathR2 = `./gfx/${imageOnTopNameR2}.png`;
         let pieceIDR2 = imageOnTopNameR
         imageCounterStrike++
-        const rightPiece2 = new Piece(playerID, pieceIDR2, topMaterialPathR2)
+        const rightPiece2 = new Piece(this.playerID, pieceIDR2, topMaterialPathR2)
         rightPiece2.position.x = (0); //3.5 * 5 - 17.5
         rightPiece2.position.y = (pieceH);
         rightPiece2.position.z = (-8 * zmiennaZ + 0.5 * zmiennaZ);
@@ -225,38 +240,54 @@ class Game {
         const intersects = this.raycaster.intersectObjects(this.scene.children);
         // console.log(intersects.length)
         console.log("teraz clicknięty: " + intersects[0].object.pieceID);
+        console.log(intersects)
 
         if (lastClickedPieceImageObj != undefined) {
             //console.log(intersects[0].object)
-            for (let i = 0; i < intersects.length; i++) {
-                if (intersects.length > 0 && intersects[0].object.name == "clickable" && lastClickedPieceImageObj.pieceID == intersects[0].object.pieceID) { // && lastClickedPieceImageObj.pieceID == intersects[0].object.pieceID
-                    // console.log(intersects[0].object.id)
-                    intersects[0].object.material = new THREE.MeshBasicMaterial({
-                        color: 0x00ff00, transparent: false,
-                        opacity: 1,
-                    });
+            //for (let i = 0; i < intersects.length; i++) {
+            if (intersects.length > 0 && intersects[0].object.name == "clickable" && lastClickedPieceImageObj.pieceID == intersects[0].object.pieceID && lastClickedPieceImageObj.id != intersects[0].object.id) { // && lastClickedPieceImageObj.pieceID == intersects[0].object.pieceID
+                // console.log(intersects[0].object.id)
+                intersects[0].object.material = new THREE.MeshBasicMaterial({
+                    color: 0x00ff00, transparent: false,
+                    opacity: 1,
+                });
 
-                    lastClickedPieceImageObj.material = new THREE.MeshBasicMaterial({
-                        color: 0x00ff00, transparent: false,
-                        opacity: 1,
-                    })
+                lastClickedPieceImageObj.material = new THREE.MeshBasicMaterial({
+                    color: 0x00ff00, transparent: false,
+                    opacity: 1,
+                })
 
-                    //Znalezienie ostatnio klikniętego elementu po jego id i podmiana jego mesha jw
-                    // console.log(lastClickedPieceImageObj.id)
-                    // let found = intersects.find(element => element.object.id == lastClickedPieceImageObj.id)
-                    // console.log(found)
+                console.log(lastClickedPieceImageObj.id)
+                console.log(intersects[0].object.id)
 
-                    // lastClickedPieceImageObj.id
+                //Znalezienie ostatnio klikniętego elementu po jego id i podmiana jego mesha jw
+                // console.log(lastClickedPieceImageObj.id)
+
+                //let found = intersects[0].find(element => element.object.id == lastClickedPieceImageObj.id)
+                //console.log(found)
+
+                // lastClickedPieceImageObj.id
 
 
-                    //console.log(intersects[0].object);
+                //console.log(intersects[0].object);
 
-                    //Funkcja odpowiedzialna za znalezienie elementów z piec
-                }
+                //Funkcja odpowiedzialna za znalezienie elementów z piec
+
+
+
+                cosik = true
             }
+            //}
+            // console.log(intersects)
+
         }
         lastClickedPieceImageObj = intersects[0].object
-        console.log(lastClickedPieceImageObj)
+
+        //nadpisanie na undefined'a, jeżeli ten if sie wykonał
+        if (cosik == true)
+            lastClickedPieceImageObj = undefined //w celu uniknięcia 3ciego kliku psującego
+        cosik = false
+        // console.log(lastClickedPieceImageObj)
 
     }
     render = () => {

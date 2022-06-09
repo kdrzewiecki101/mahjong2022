@@ -96,10 +96,10 @@ function startImages() {
         startingItemsArray.push(imageName)
 
         if (XXXX[rN].multiplicity == 0) {
-            console.log("TO KONIEC DLA: " + XXXX[rN].name)
+            //console.log("TO KONIEC DLA: " + XXXX[rN].name)
             let filteredBombowo = XXXX.filter(function (el) { return el.name != XXXX[rN].name })
             XXXX = filteredBombowo
-            console.log(XXXX)
+            //console.log(XXXX)
         }
 
         // console.log(XXXX[rN].name)
@@ -108,6 +108,8 @@ function startImages() {
     //console.log(startingItemsArray)
     return startingItemsArray
 }
+
+
 
 
 // function deleteFromImages(clicked) {
