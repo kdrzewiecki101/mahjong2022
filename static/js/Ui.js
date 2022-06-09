@@ -1,5 +1,6 @@
 console.log("UI")
 import { game, net, ui } from "../js/Main.js";
+import { images, imagesLeft, startImages } from "../js/images.js";
 
 class Ui {
     constructor() {
@@ -50,16 +51,20 @@ class Ui {
             let check = await net.checkUsers()
             console.log(check.ready)
             if (check.ready) {
-                this.afterLogin(login)
+                this.afterLogin(login, check.gameboardImagesRandomized)
+                // console.log(check.gameboardImagesRandomized)
+                //przekazać parametr check.gameboardImagesRandomized do klasy game i na podstawie jego wgenerować dla każdego gracza plansze
+                //Dodać później do pliku Game fetcha odpowiedzialnego za reset wszystkih paametrow
+                //plansza, obrazki losowe, luje muje dziekie węze
             }
         }
             , 500)
     }
 
-    afterLogin(login) {
+    afterLogin(login, gameboardImagesRandomized) {
         clearInterval(this.interval)
         console.log(login)
-        game.start(login) //Odpalenie funkcji mówiącej którym graczem będiesz
+        game.start(login, gameboardImagesRandomized) //Odpalenie funkcji mówiącej którym graczem będiesz
         // console.log("ZOBA TU TERA:")
         // console.log(game.hasGameStarted)
         game.hasGameStarted = true;
