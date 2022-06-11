@@ -131,6 +131,7 @@ app.get("/check", (req, res) => {
         //let wynik = randomizeBoardImages();
         // console.log(wynik)
         //console.log(wynik)
+        console.log(doublePlayerGameboard)
         res.send(JSON.stringify({ ready: true, gameboardImagesRandomized: doublePlayerGameboard }))
     }
     else {
