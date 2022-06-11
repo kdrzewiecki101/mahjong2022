@@ -56,6 +56,8 @@ class Net {
         }
         else {
             let jsonCheck = await response.json() // response.json
+            game.hasGameStarted = false;
+            console.log(jsonCheck)
             return jsonCheck
         }
     }
