@@ -162,34 +162,40 @@ class Game {
         this.scene.add(piece);
     }
     createSidewaysPieces = (pieceH) => {
+        //LEWA
         let imageOnTopNameL = this.yourGameboardImages[imageCounterStrike]
         let topMaterialPathL = `./gfx/${imageOnTopNameL}.png`;
         let pieceIDL = imageOnTopNameL
-        imageCounterStrike++
+
+        console.log("LEWY 1:")
+        console.log(imageOnTopNameL + " " + topMaterialPathL + " " + pieceIDL)
+
         const leftPiece = new Piece(this.playerID, pieceIDL, topMaterialPathL)
         leftPiece.position.x = (0); //3.5 * 5 - 17.5
         leftPiece.position.y = (pieceH);
         leftPiece.position.z = (6 * zmiennaZ + 0.5 * zmiennaZ);
         this.scene.add(leftPiece);
+        imageCounterStrike++
 
+        //PRAWA
         let imageOnTopNameR = this.yourGameboardImages[imageCounterStrike]
         let topMaterialPathR = `./gfx/${imageOnTopNameR}.png`;
         let pieceIDR = imageOnTopNameR
-        imageCounterStrike++
         const rightPiece = new Piece(this.playerID, pieceIDR, topMaterialPathR)
         rightPiece.position.x = (0); //3.5 * 5 - 17.5
         rightPiece.position.y = (pieceH);
         rightPiece.position.z = (-7 * zmiennaZ + 0.5 * zmiennaZ);
         this.scene.add(rightPiece);
+        imageCounterStrike++
         let imageOnTopNameR2 = this.yourGameboardImages[imageCounterStrike]
         let topMaterialPathR2 = `./gfx/${imageOnTopNameR2}.png`;
-        let pieceIDR2 = imageOnTopNameR
-        imageCounterStrike++
+        let pieceIDR2 = imageOnTopNameR2
         const rightPiece2 = new Piece(this.playerID, pieceIDR2, topMaterialPathR2)
         rightPiece2.position.x = (0); //3.5 * 5 - 17.5
         rightPiece2.position.y = (pieceH);
         rightPiece2.position.z = (-8 * zmiennaZ + 0.5 * zmiennaZ);
         this.scene.add(rightPiece2);
+        imageCounterStrike++
     }
     createBoard = () => {
         const geometry = new THREE.BoxGeometry(75, 3, 75);
