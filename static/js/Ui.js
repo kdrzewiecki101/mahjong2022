@@ -1,6 +1,5 @@
 console.log("UI")
 import { game, net, ui } from "../js/Main.js";
-import { images, imagesLeft, startImages } from "../js/images.js";
 
 class Ui {
     constructor() {

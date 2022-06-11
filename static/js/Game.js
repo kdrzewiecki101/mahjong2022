@@ -2,7 +2,6 @@ import { OrbitControls } from "../js/OrbitControls.js";
 import { Board } from "../js/Board.js";
 import * as THREE from '../js/three.module.js';
 import { Piece } from "../js/Piece.js";
-//import { images, imagesLeft, startImages } from "../js/images.js"
 
 
 let zmiennaX = 4.6
@@ -60,13 +59,17 @@ class Game {
     }
 
     start(login, gameboardImagesRandomized) {
+        //console.log(login)
+        console.log("AAAAAAAAAAAAAAAAAa")
         this.yourLogin = login
         this.yourGameboardImages = gameboardImagesRandomized
-        console.log(login.id)
-        console.log("YOUR LOGIN: " + this.yourLogin)
-        console.log("Your gameboard:")
-        console.log(this.yourGameboardImages)
+        this.imageCounterStrike = 0
+        //console.log(login.id)
+        // console.log("YOUR LOGIN: " + this.yourLogin)
+        // console.log("Your gameboard:")
+        // console.log(this.yourGameboardImages)
         if (login.id == 1) {
+            this.imageCounterStrike = 0
             console.log("PIERWSZY")
             this.playerID = 1
             this.createFloor(this.board.zeroFloor, this.pieceH * 1);
@@ -77,7 +80,8 @@ class Game {
             this.createSidewaysPieces(this.pieceH * 1);
         }
 
-        else if (login.id == 2) {
+        if (login.id == 2) {
+            this.imageCounterStrike = 0
             console.log("DRUGA")
             this.playerID = 2
             this.createFloor(this.board.zeroFloor, this.pieceH * 1);
@@ -87,13 +91,6 @@ class Game {
             this.createTopPiece(this.pieceH * 5);
             this.createSidewaysPieces(this.pieceH * 1);
         }
-
-        // this.createFloor(this.board.zeroFloor, this.pieceH * 1);
-        // this.createFloor(this.board.firstFloor, this.pieceH * 2);
-        // this.createFloor(this.board.secondFloor, this.pieceH * 3);
-        // this.createFloor(this.board.thirdFloor, this.pieceH * 4);
-        // this.createTopPiece(this.pieceH * 5);
-        // this.createSidewaysPieces(this.pieceH * 1);
 
         //Wygenerować na podstawie this.gameBoard dla każdego gracza plansze
 

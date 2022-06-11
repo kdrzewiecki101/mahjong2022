@@ -58,39 +58,43 @@ const images = [
 
 ]
 
-let startingItemsArray = []
+let doublePlayerGameboard = []
+
+
 function randomizeBoardImages() {
-    imagesLeft = []
+    const startingItemsArray = []
+    const imagesLeft = []
     for (let i = 0; i < images.length; i++) {
         for (let j = 0; j < images[i].multiplicity; j++) {
             // console.log(images[i].name)
             imagesLeft.push(images[i].name)
         }
     }
-    let XXXX = images
+    // let XXXX = images
 
-    for (let i = 0; i < imagesLeft.length; i++) {
-        let rN = Math.floor(Math.random() * XXXX.length)
+    while (imagesLeft.length != 0) {
+        let rN = Math.floor(Math.random() * imagesLeft.length)
 
-        XXXX[rN].multiplicity--
-        let imageName = XXXX[rN].name
-        // console.log(imageName)
-        startingItemsArray.push(imageName)
+        // XXXX[rN].multiplicity--
+        // let imageName = XXXX[rN].name
+        startingItemsArray.push(imagesLeft[rN])
 
-        if (XXXX[rN].multiplicity == 0) {
-            //console.log("TO KONIEC DLA: " + XXXX[rN].name)
-            let filteredBombowo = XXXX.filter(function (el) { return el.name != XXXX[rN].name })
-            XXXX = filteredBombowo
-            //console.log(XXXX)
-        }
+        imagesLeft.splice(rN, 1)
 
-        // console.log(XXXX[rN].name)
-
+        // if (XXXX[rN].multiplicity == 0) {
+        //     let filteredBombowo = XXXX.filter(function (el) { return el.name != XXXX[rN].name })
+        //     XXXX = filteredBombowo
+        // }
     }
     //console.log(startingItemsArray)
     return startingItemsArray
 }
 
+// console.log(randomizeBoardImages())
+// console.log(randomizeBoardImages())
+// console.log(randomizeBoardImages())
+// console.log(randomizeBoardImages())
+// console.log(randomizeBoardImages())
 
 app.listen(PORT, function () {
     console.log("start serwera na porcie " + PORT)
@@ -110,6 +114,7 @@ app.post("/addUser", (req, res) => {
     if (users.length < 2) {
         users.push(JSON.parse(req.body).nickname);
         console.log(users)
+        doublePlayerGameboard = randomizeBoardImages()
         res.send(JSON.stringify({ id: users.length, nickname: JSON.parse(req.body).nickname, added: true }))
     }
 
@@ -126,7 +131,7 @@ app.get("/check", (req, res) => {
         //let wynik = randomizeBoardImages();
         // console.log(wynik)
         //console.log(wynik)
-        res.send(JSON.stringify({ ready: true, gameboardImagesRandomized: randomizeBoardImages() }))
+        res.send(JSON.stringify({ ready: true, gameboardImagesRandomized: doublePlayerGameboard }))
     }
     else {
         res.send(JSON.stringify({ ready: false }))
