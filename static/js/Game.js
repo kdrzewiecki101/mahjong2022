@@ -244,7 +244,7 @@ class Game {
     hoverPieces = () => {
         this.raycaster.setFromCamera(this.pointer, this.camera);
         const intersects = this.raycaster.intersectObjects(this.scene.children);
-        console.log(intersects.length);
+        //console.log(intersects.length);
         for (let i = 0; i < intersects.length; i++) {
             if (intersects.length > 0 && intersects[0].object.name == "clickable") {
                 intersects[0].object.material = new THREE.MeshBasicMaterial({
@@ -269,24 +269,36 @@ class Game {
             let correctPieces = this.scene.children.filter(function (el) { return el.name == "clickable" })
             this.playerPiecesLeft = correctPieces
 
-            console.log("Position:")
+            //console.log("Position:")
             nowClickedPositionLR = intersects[0].object.positionLR
             nowClickedPositionRow = intersects[0].object.positionRow
             nowClickedPositionHeight = intersects[0].object.positionHeight
             console.log(nowClickedPositionLR + " - " + nowClickedPositionRow)
 
-            console.log("positionLR:")
-            console.log(nowClickedPositionLR)
+            // console.log("positionLR:")
+            // console.log(nowClickedPositionLR)
 
-            console.log("positionRow:")
-            console.log(nowClickedPositionRow)
+            // console.log("positionRow:")
+            // console.log(nowClickedPositionRow)
 
-            console.log("positionHeight:")
-            console.log(nowClickedPositionHeight)
+            // console.log("positionHeight:")
+            // console.log(nowClickedPositionHeight)
 
             // let controlRow = nowClickedPositionRow
 
-            let sameRowElements = this.playerPiecesLeft.filter(function (el) { return el.positionRow == nowClickedPositionRow && el.positionHeight == nowClickedPositionHeight })
+            let sameRowElements = this.playerPiecesLeft.filter(function (el) {
+                return (el.positionRow == nowClickedPositionRow && el.positionHeight == nowClickedPositionHeight) ||
+                    (el.positionRow == nowClickedPositionRow - 0.5 && el.positionHeight == nowClickedPositionHeight) || // klocki specjalnej troski
+                    (el.positionRow == nowClickedPositionRow + 0.5 && el.positionHeight == nowClickedPositionHeight)
+            })
+
+            let topSpecialPiece = this.playerPiecesLeft.find(el => el.positionHeight == 5) //Szczyt piramidy 
+
+            if (topSpecialPiece != undefined && nowClickedPositionHeight == 4) { //jeżeli istnieje szczyt piramidy
+                console.log("Ruch jest blokowany")
+                return
+            }
+
             console.log("sameRowElements:")
             console.log(sameRowElements)
 
@@ -301,11 +313,11 @@ class Game {
                     minInControlRow = sameRowElements[i].positionLR
             }
 
-            console.log("max: ")
-            console.log(maxInControlRow)
+            // console.log("max: ")
+            // console.log(maxInControlRow)
 
-            console.log("min: ")
-            console.log(minInControlRow)
+            // console.log("min: ")
+            // console.log(minInControlRow)
 
             if (nowClickedPositionLR == maxInControlRow || nowClickedPositionLR == minInControlRow) { //Jeżeli skrajne w swoim rzędzie
                 console.log("MOŻNA KLIKAĆ")
@@ -331,8 +343,8 @@ class Game {
                     //     opacity: 1,
                     // })
 
-                    console.log(lastClickedPieceImageObj.id)
-                    console.log(intersects[0].object.id)
+                    // console.log(lastClickedPieceImageObj.id)
+                    // console.log(intersects[0].object.id)
 
                     wasSomethingClicked = true
                 }
@@ -342,7 +354,7 @@ class Game {
 
 
             else {
-                console.log("No tak średnio")
+                console.log("Ruch jest blokowany")
                 return
             }
 
