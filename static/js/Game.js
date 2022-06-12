@@ -10,10 +10,11 @@ let zmiennaZ = 3.6
 //global helpers
 let imageCounterStrike = 0
 let lastClickedPieceImageObj
-let cosik = false
+let wasSomethingClicked = false
 
 class Game {
     constructor() {
+        this.playerCurrentGameboard = [];
         this.hasGameStarted = false;
         this.yourLogin;
         this.yourGameboardImages
@@ -135,6 +136,11 @@ class Game {
                     console.log(this.playerID)
                     console.log(imageCounterStrike)
                     //console.log("TOP MATERIAL PATH: " + topMaterialPath)
+
+                    //Tablica aktualnej planszy gracza na start:
+
+
+
                     const piece = new Piece(this.playerID, pieceID, topMaterialPath);
                     // console.log(piece);
                     piece.position.x = (i * zmiennaX + 0.5 * zmiennaX);
@@ -250,15 +256,19 @@ class Game {
             //for (let i = 0; i < intersects.length; i++) {
             if (intersects.length > 0 && intersects[0].object.name == "clickable" && lastClickedPieceImageObj.pieceID == intersects[0].object.pieceID && lastClickedPieceImageObj.id != intersects[0].object.id) { // && lastClickedPieceImageObj.pieceID == intersects[0].object.pieceID
                 // console.log(intersects[0].object.id)
-                intersects[0].object.material = new THREE.MeshBasicMaterial({
-                    color: 0x00ff00, transparent: false,
-                    opacity: 1,
-                });
 
-                lastClickedPieceImageObj.material = new THREE.MeshBasicMaterial({
-                    color: 0x00ff00, transparent: false,
-                    opacity: 1,
-                })
+                intersects[0].object.removeFromParent()
+                lastClickedPieceImageObj.removeFromParent()
+
+                // intersects[0].object.material = new THREE.MeshBasicMaterial({
+                //     color: 0x00ff00, transparent: false,
+                //     opacity: 1,
+                // });
+
+                // lastClickedPieceImageObj.material = new THREE.MeshBasicMaterial({
+                //     color: 0x00ff00, transparent: false,
+                //     opacity: 1,
+                // })
 
                 console.log(lastClickedPieceImageObj.id)
                 console.log(intersects[0].object.id)
@@ -278,7 +288,7 @@ class Game {
 
 
 
-                cosik = true
+                wasSomethingClicked = true
             }
             //}
             // console.log(intersects)
@@ -286,10 +296,12 @@ class Game {
         }
         lastClickedPieceImageObj = intersects[0].object
 
+
+
         //nadpisanie na undefined'a, jeżeli ten if sie wykonał
-        if (cosik == true)
+        if (wasSomethingClicked == true)
             lastClickedPieceImageObj = undefined //w celu uniknięcia 3ciego kliku psującego
-        cosik = false
+        wasSomethingClicked = false
         // console.log(lastClickedPieceImageObj)
 
     }
