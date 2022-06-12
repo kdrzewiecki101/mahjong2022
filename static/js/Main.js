@@ -10,6 +10,13 @@ window.onload = () => {
     game = new Game();
     net = new Net();
     ui = new Ui();
+
+    document.addEventListener("keypress", function (event) {
+        // console.log(event.keyCode)
+        if (event.keyCode == 115) {
+            game.pieceShuffling()
+        }
+    });
 };
 
 export { game, net, ui }
