@@ -273,7 +273,7 @@ class Game {
             nowClickedPositionLR = intersects[0].object.positionLR
             nowClickedPositionRow = intersects[0].object.positionRow
             nowClickedPositionHeight = intersects[0].object.positionHeight
-            console.log(nowClickedPositionLR + " - " + nowClickedPositionRow)
+            console.log(nowClickedPositionLR + " " + nowClickedPositionRow + " " + nowClickedPositionHeight)
 
             // console.log("positionLR:")
             // console.log(nowClickedPositionLR)
@@ -299,8 +299,8 @@ class Game {
                 return
             }
 
-            console.log("sameRowElements:")
-            console.log(sameRowElements)
+            // console.log("sameRowElements:")
+            // console.log(sameRowElements)
 
             let maxInControlRow = -10
             let minInControlRow = 10
@@ -322,13 +322,8 @@ class Game {
             if (nowClickedPositionLR == maxInControlRow || nowClickedPositionLR == minInControlRow) { //Jeżeli skrajne w swoim rzędzie
                 console.log("MOŻNA KLIKAĆ")
                 //Good Normal Match
-                if (intersects.length > 0 && intersects[0].object.name == "clickable" &&
-                    lastClickedPieceImageObj.pieceID == intersects[0].object.pieceID &&
-                    lastClickedPieceImageObj.id != intersects[0].object.id) { // && lastClickedPieceImageObj.pieceID == intersects[0].object.pieceID
-                    // console.log(intersects[0].object.id)
 
-                    console.log("DZIECIACZKI:")
-                    console.log(this.playerPiecesLeft)
+                if (intersects.length > 0 && intersects[0].object.name == "clickable" && lastClickedPieceImageObj.pieceID == intersects[0].object.pieceID && lastClickedPieceImageObj.id != intersects[0].object.id) {
 
                     intersects[0].object.removeFromParent()
                     lastClickedPieceImageObj.removeFromParent()
@@ -349,7 +344,10 @@ class Game {
                     wasSomethingClicked = true
                 }
 
-                lastClickedPieceImageObj = intersects[0].object
+                if (intersects[0].object != undefined)
+                    lastClickedPieceImageObj = intersects[0].object
+                else
+                    lastClickedPieceImageObj = ""
             }
 
 
@@ -374,14 +372,89 @@ class Game {
         wasSomethingClicked = false
         // console.log(lastClickedPieceImageObj)
 
-
-
-
-        // let michal1 = intersects[0].object.positionLR
-        // if (intersects[0].object.)
-
-
     }
+
+    pieceShuffling = () => {
+        let receivedImages = []
+        let receivedPositions = []
+        console.log("SHUFFLING")
+        let correctPieces = this.scene.children.filter(function (el) { return el.name == "clickable" })
+        this.playerPiecesLeft = correctPieces
+        // console.log(this.playerPiecesLeft)
+
+        for (let i = 0; i < this.playerPiecesLeft.length; i++) {
+
+            //nazwa zdjecia
+            receivedImages.push(this.playerPiecesLeft[i].pieceID)
+
+            //miejsce płytki
+            let positionsObj = {
+                positionLR: this.playerPiecesLeft[i].positionLR,
+                positionRow: this.playerPiecesLeft[i].positionRow,
+                positionHeight: this.playerPiecesLeft[i].positionHeight
+            }
+            receivedPositions.push(positionsObj)
+            // console.log(positionsObj)
+
+        }
+        // console.log(receivedImages)
+        // console.log(receivedPositions)
+
+        this.abortAllPieces()
+        this.rebuildBoard(receivedImages, receivedPositions)
+    }
+
+    abortAllPieces = () => {
+        wasSomethingClicked = false
+        lastClickedPieceImageObj = "" //errorDodge
+        for (let i = this.scene.children.length; i > 0; i--) {
+            let child = this.scene.children[i];
+            // console.log(obj)
+            this.scene.remove(child);
+        }
+    }
+
+    rebuildBoard = (rebuildImages, rebuildPositions) => {
+        let shuffledImagesArray = []
+        const imagesLeft = []
+        for (let i = 0; i < rebuildImages.length; i++) {
+            imagesLeft.push(rebuildImages[i])
+        }
+
+        while (imagesLeft.length != 0) {
+            let rN = Math.floor(Math.random() * imagesLeft.length)
+            shuffledImagesArray.push(imagesLeft[rN])
+            imagesLeft.splice(rN, 1)
+        }
+
+        for (let i = 0; i < rebuildImages.length; i++) {
+            let imageOnTopName = shuffledImagesArray[i]
+            let topMaterialPath = `./gfx/${imageOnTopName}.png`;
+            let pieceID = imageOnTopName
+            let positionLR = rebuildPositions[i].positionLR
+            let positionRow = rebuildPositions[i].positionRow
+            let positionHeight = rebuildPositions[i].positionHeight
+
+            const piece = new Piece(this.playerID, pieceID, topMaterialPath, positionLR, positionRow, positionHeight)
+            // console.log(piece)
+            piece.position.x = (positionRow * zmiennaX + 0.5 * zmiennaX);
+            piece.position.y = (this.pieceH * positionHeight);
+            piece.position.z = (positionLR * zmiennaZ + 0.5 * zmiennaZ);
+            this.scene.add(piece)
+        }
+
+        // let positionLR = j
+        // let positionRow = i
+
+        // const piece = new Piece(this.playerID, pieceID, topMaterialPath, positionLR, positionRow, level);
+        // // console.log(piece);
+        // piece.position.x = (i * zmiennaX + 0.5 * zmiennaX);
+        // piece.position.y = (pieceH * level); //pieceH + 3
+        // piece.position.z = (j * zmiennaZ + 0.5 * zmiennaZ);
+        // this.scene.add(piece);
+        // imageCounterStrike++
+    }
+
     render = () => {
         //console.log("render leci")        
         this.controls.update();
