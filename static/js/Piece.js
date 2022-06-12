@@ -1,11 +1,14 @@
 import * as THREE from '../js/three.module.js';
 class Piece extends THREE.Mesh {
-    constructor(playerID, pieceID, topMaterialPath) {
+    constructor(playerID, pieceID, topMaterialPath, positionLR, positionRow, positionHeight) {
         super() //wywołanie konstruktora klasy
         this.playerID = playerID
         this.pieceID = pieceID
         this.name = "clickable";
         this.topMaterialPath = topMaterialPath;
+        this.positionLR = positionLR;
+        this.positionRow = positionRow;
+        this.positionHeight = positionHeight;
         this.geometry = new THREE.BoxGeometry(4.5, 2, 3.15); //potencjalnie wrzucić w zmienne wielkości
         this.material = [];
         this.material.push(new THREE.MeshBasicMaterial({ side: THREE.DoubleSide, map: new THREE.TextureLoader().load('./gfx/side2.png') }));
