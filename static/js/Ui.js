@@ -62,8 +62,8 @@ class Ui {
 
     afterLogin(login, gameboardImagesRandomized) {
         clearInterval(this.interval)
-        console.log(login)
-        console.log(gameboardImagesRandomized)
+        // console.log(login)
+        // console.log(gameboardImagesRandomized)
         game.start(login, gameboardImagesRandomized) //Odpalenie funkcji mówiącej którym graczem będiesz
         // console.log("ZOBA TU TERA:")
         // console.log(game.hasGameStarted)

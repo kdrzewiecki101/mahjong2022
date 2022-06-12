@@ -14,7 +14,7 @@ let wasSomethingClicked = false
 
 class Game {
     constructor() {
-        this.playerCurrentGameboard = [];
+        this.playerPiecesLeft = [];
         this.hasGameStarted = false;
         this.yourLogin;
         this.yourGameboardImages
@@ -30,8 +30,8 @@ class Game {
         // Scena3D
         this.scene = new THREE.Scene();
         this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        this.axes = new THREE.AxesHelper(1000)
-        this.scene.add(this.axes);
+        // this.axes = new THREE.AxesHelper(1000)
+        // this.scene.add(this.axes);
         // Renderer
         this.renderer = new THREE.WebGLRenderer({ antialiasing: true });
         this.renderer.setClearColor(0x483d8b);
@@ -61,7 +61,7 @@ class Game {
 
     start(login, gameboardImagesRandomized) {
         //console.log(login)
-        console.log("AAAAAAAAAAAAAAAAAa")
+        // console.log("AAAAAAAAAAAAAAAAAa")
         this.yourLogin = login
         this.yourGameboardImages = gameboardImagesRandomized
         this.imageCounterStrike = 0
@@ -133,8 +133,8 @@ class Game {
                     let imageOnTopName = this.yourGameboardImages[imageCounterStrike]
                     let topMaterialPath = `./gfx/${imageOnTopName}.png`;
                     let pieceID = imageOnTopName
-                    console.log(this.playerID)
-                    console.log(imageCounterStrike)
+                    // console.log(this.playerID)
+                    // console.log(imageCounterStrike)
                     //console.log("TOP MATERIAL PATH: " + topMaterialPath)
 
                     //Tablica aktualnej planszy gracza na start:
@@ -173,8 +173,8 @@ class Game {
         let topMaterialPathL = `./gfx/${imageOnTopNameL}.png`;
         let pieceIDL = imageOnTopNameL
 
-        console.log("LEWY 1:")
-        console.log(imageOnTopNameL + " " + topMaterialPathL + " " + pieceIDL)
+        // console.log("LEWY 1:")
+        // console.log(imageOnTopNameL + " " + topMaterialPathL + " " + pieceIDL)
 
         const leftPiece = new Piece(this.playerID, pieceIDL, topMaterialPathL)
         leftPiece.position.x = (0); //3.5 * 5 - 17.5
@@ -249,7 +249,7 @@ class Game {
         const intersects = this.raycaster.intersectObjects(this.scene.children);
         // console.log(intersects.length)
         console.log("teraz clicknięty: " + intersects[0].object.pieceID);
-        console.log(intersects)
+        // console.log(intersects[0].object)
 
         if (lastClickedPieceImageObj != undefined) {
             //console.log(intersects[0].object)
@@ -303,6 +303,13 @@ class Game {
             lastClickedPieceImageObj = undefined //w celu uniknięcia 3ciego kliku psującego
         wasSomethingClicked = false
         // console.log(lastClickedPieceImageObj)
+
+        let correctPieces = this.scene.children.filter(function (el) { return el.name == "clickable" })
+        // console.log(correctPieces)
+        this.playerPiecesLeft = correctPieces
+
+        console.log("DZIECIACZKI:")
+        console.log(this.playerPiecesLeft)
 
     }
     render = () => {
