@@ -17,11 +17,6 @@ class Piece extends THREE.Mesh {
         this.material.push(new THREE.MeshBasicMaterial({ side: THREE.DoubleSide, map: new THREE.TextureLoader().load('./gfx/side3.png') }));
         this.material.push(new THREE.MeshBasicMaterial({ side: THREE.DoubleSide, map: new THREE.TextureLoader().load('./gfx/side3.png') }));
         this.material.push(new THREE.MeshBasicMaterial({ side: THREE.DoubleSide, map: new THREE.TextureLoader().load('./gfx/side3.png') }));
-        // this.material = new THREE.MeshBasicMaterial({
-        //     color: 0x00ff00, transparent: false,
-        //     opacity: 1,
-        // });
-        //this.material = new THREE.MeshNormalMaterial({});
         this.mesh = new THREE.Mesh(this.geometry, this.material);
     }
 }

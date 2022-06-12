@@ -4,8 +4,6 @@ const PORT = 3000;
 let users = [];
 app.use(express.static('static'));
 app.use(express.text());
-
-
 const images = [
     { name: "bamboo1", multiplicity: 4 },
     { name: "bamboo2", multiplicity: 4 },
@@ -57,49 +55,28 @@ const images = [
     { name: "wind4", multiplicity: 4 }
 
 ]
-
 let doublePlayerGameboard = []
-
 
 function randomizeBoardImages() {
     const startingItemsArray = []
     const imagesLeft = []
     for (let i = 0; i < images.length; i++) {
         for (let j = 0; j < images[i].multiplicity; j++) {
-            // console.log(images[i].name)
             imagesLeft.push(images[i].name)
         }
     }
-    // let XXXX = images
 
     while (imagesLeft.length != 0) {
         let rN = Math.floor(Math.random() * imagesLeft.length)
-
-        // XXXX[rN].multiplicity--
-        // let imageName = XXXX[rN].name
         startingItemsArray.push(imagesLeft[rN])
-
         imagesLeft.splice(rN, 1)
-
-        // if (XXXX[rN].multiplicity == 0) {
-        //     let filteredBombowo = XXXX.filter(function (el) { return el.name != XXXX[rN].name })
-        //     XXXX = filteredBombowo
-        // }
     }
-    //console.log(startingItemsArray)
     return startingItemsArray
 }
-
-// console.log(randomizeBoardImages())
-// console.log(randomizeBoardImages())
-// console.log(randomizeBoardImages())
-// console.log(randomizeBoardImages())
-// console.log(randomizeBoardImages())
 
 app.listen(PORT, function () {
     console.log("start serwera na porcie " + PORT)
 })
-
 
 app.post("/addUser", (req, res) => {
     // console.log(JSON.parse(req.body).nickname)
@@ -127,10 +104,6 @@ app.post("/addUser", (req, res) => {
 app.get("/check", (req, res) => {
     if (users.length == 2) {
         console.log("GOTOWOŚĆ DO GRY")
-        //Jeżeli gotowość do gry graczy, to przekaż zdjęcia
-        //let wynik = randomizeBoardImages();
-        // console.log(wynik)
-        //console.log(wynik)
         console.log(doublePlayerGameboard)
         res.send(JSON.stringify({ ready: true, gameboardImagesRandomized: doublePlayerGameboard }))
     }

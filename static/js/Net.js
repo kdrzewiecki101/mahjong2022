@@ -4,10 +4,7 @@ import { game, net, ui } from "../js/Main.js";
 class Net {
     loginUser() {
         this.nickname = ui.nickname.value;
-        // console.log(this.nickname);
-
         this.addUser()
-        // this.staryWstal()
     }
 
     addUser = async () => {
@@ -25,7 +22,6 @@ class Net {
         if (!response.ok)
             return response.status
         else {
-            // console.log(response.json)
             let jsonAdd = await response.json() // response.json
             console.log(jsonAdd)
 

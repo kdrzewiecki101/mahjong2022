@@ -3,19 +3,16 @@ import { Board } from "../js/Board.js";
 import * as THREE from '../js/three.module.js';
 import { Piece } from "../js/Piece.js";
 
-
 let zmiennaX = 4.6
 let zmiennaZ = 3.6
 
 //środkowe klocki zmienna
 let specialPositionRow = -0.5
 
-
+//parametry obecnie klikniętego klocka
 let nowClickedPositionRow
 let nowClickedPositionLR
 let nowClickedPositionHeight
-// let lastClickedPositionRow
-// let lastClickedPositionLR
 
 //global helpers
 let imageCounterStrike = 0
@@ -70,15 +67,9 @@ class Game {
     }
 
     start(login, gameboardImagesRandomized) {
-        //console.log(login)
-        // console.log("AAAAAAAAAAAAAAAAAa")
         this.yourLogin = login
         this.yourGameboardImages = gameboardImagesRandomized
         this.imageCounterStrike = 0
-        //console.log(login.id)
-        // console.log("YOUR LOGIN: " + this.yourLogin)
-        // console.log("Your gameboard:")
-        // console.log(this.yourGameboardImages)
         if (login.id == 1) {
             this.imageCounterStrike = 0
             console.log("PIERWSZY")
@@ -102,29 +93,18 @@ class Game {
             this.createTopPiece(this.pieceH, 5);
             this.createSidewaysPieces(this.pieceH, 1);
         }
-
-        //Wygenerować na podstawie this.gameBoard dla każdego gracza plansze
-
-
     }
-
-
-
-
 
     createBoard = () => {
         const geometry = new THREE.BoxGeometry(75, 3, 75);
         const material = new THREE.MeshBasicMaterial({
             side: THREE.DoubleSide,
-            // map: new THREE.TextureLoader().load('../gfx/diamond.png'),
             wireframe: false,
             transparent: true,
             opacity: 1,
-            // color: 0x000000
             color: 0xd2d2d2
         });
         const cube = new THREE.Mesh(geometry, material);
-
         this.scene.add(cube);
     }
 
@@ -132,23 +112,12 @@ class Game {
 
     createFloor = (floor, pieceH, level) => {
         for (let i = -4; i < Number(floor.length - 4); i++) {
-
-            //console.log(floor)
-            //console.log(floor[Number(i + 4)].length)
-
             for (let j = -7; j < Number(floor[i + 4].length); j++) {
 
                 if (floor[i + 4][j + 7] == 1) {
-                    // let playerID = 3
                     let imageOnTopName = this.yourGameboardImages[imageCounterStrike]
                     let topMaterialPath = `./gfx/${imageOnTopName}.png`;
                     let pieceID = imageOnTopName
-                    // console.log(this.playerID)
-                    // console.log(imageCounterStrike)
-                    //console.log("TOP MATERIAL PATH: " + topMaterialPath)
-
-                    //Tablica aktualnej planszy gracza na start:
-
                     let positionLR = j
                     let positionRow = i
 
@@ -184,9 +153,6 @@ class Game {
         let topMaterialPathL = `./gfx/${imageOnTopNameL}.png`;
         let pieceIDL = imageOnTopNameL
 
-        // console.log("LEWY 1:")
-        // console.log(imageOnTopNameL + " " + topMaterialPathL + " " + pieceIDL)
-
         let leftPositionLR = 6
         let rightPositionLR = -7
         const leftPiece = new Piece(this.playerID, pieceIDL, topMaterialPathL, leftPositionLR, specialPositionRow, level)
@@ -220,11 +186,9 @@ class Game {
         const geometry = new THREE.BoxGeometry(75, 3, 75);
         const material = new THREE.MeshBasicMaterial({
             side: THREE.DoubleSide,
-            // map: new THREE.TextureLoader().load('../gfx/diamond.png'),
             wireframe: false,
             transparent: true,
             opacity: 1,
-            // color: 0x000000
             color: 0xd2d2d2
         });
         const cube = new THREE.Mesh(geometry, material);
@@ -251,7 +215,6 @@ class Game {
                     color: 0xff0000, transparent: false,
                     opacity: 1,
                 });
-                //console.log(intersects[0].object);
             }
         }
     }
@@ -260,31 +223,15 @@ class Game {
             console.log("ostatnio kliknięty: " + lastClickedPieceImageObj.pieceID)
         this.raycaster.setFromCamera(this.pointer, this.camera);
         const intersects = this.raycaster.intersectObjects(this.scene.children);
-        // console.log(intersects.length)
         console.log("teraz clicknięty: " + intersects[0].object.pieceID);
-        // console.log(intersects[0].object)
 
         if (lastClickedPieceImageObj != undefined) {
-
             let correctPieces = this.scene.children.filter(function (el) { return el.name == "clickable" })
             this.playerPiecesLeft = correctPieces
-
-            //console.log("Position:")
             nowClickedPositionLR = intersects[0].object.positionLR
             nowClickedPositionRow = intersects[0].object.positionRow
             nowClickedPositionHeight = intersects[0].object.positionHeight
-            console.log(nowClickedPositionLR + " " + nowClickedPositionRow + " " + nowClickedPositionHeight)
-
-            // console.log("positionLR:")
-            // console.log(nowClickedPositionLR)
-
-            // console.log("positionRow:")
-            // console.log(nowClickedPositionRow)
-
-            // console.log("positionHeight:")
-            // console.log(nowClickedPositionHeight)
-
-            // let controlRow = nowClickedPositionRow
+            console.log(nowClickedPositionLR + " " + nowClickedPositionRow + " " + nowClickedPositionHeight)  //Wyświetlanie Wszystkich parametrow pozycji klikniętego klocka
 
             let sameRowElements = this.playerPiecesLeft.filter(function (el) {
                 return (el.positionRow == nowClickedPositionRow && el.positionHeight == nowClickedPositionHeight) ||
@@ -299,79 +246,36 @@ class Game {
                 return
             }
 
-            // console.log("sameRowElements:")
-            // console.log(sameRowElements)
-
             let maxInControlRow = -10
             let minInControlRow = 10
 
             for (let i = 0; i < sameRowElements.length; i++) {
-                // console.log(sameRowElements[i].positionLR)
                 if (sameRowElements[i].positionLR > maxInControlRow)
                     maxInControlRow = sameRowElements[i].positionLR
                 if (sameRowElements[i].positionLR < minInControlRow)
                     minInControlRow = sameRowElements[i].positionLR
             }
 
-            // console.log("max: ")
-            // console.log(maxInControlRow)
-
-            // console.log("min: ")
-            // console.log(minInControlRow)
-
             if (nowClickedPositionLR == maxInControlRow || nowClickedPositionLR == minInControlRow) { //Jeżeli skrajne w swoim rzędzie
-                console.log("MOŻNA KLIKAĆ")
-                //Good Normal Match
-
+                //Normal Match
                 if (intersects.length > 0 && intersects[0].object.name == "clickable" && lastClickedPieceImageObj.pieceID == intersects[0].object.pieceID && lastClickedPieceImageObj.id != intersects[0].object.id) {
-
                     intersects[0].object.removeFromParent()
                     lastClickedPieceImageObj.removeFromParent()
-
-                    // intersects[0].object.material = new THREE.MeshBasicMaterial({
-                    //     color: 0x00ff00, transparent: false,
-                    //     opacity: 1,
-                    // });
-
-                    // lastClickedPieceImageObj.material = new THREE.MeshBasicMaterial({
-                    //     color: 0x00ff00, transparent: false,
-                    //     opacity: 1,
-                    // })
-
-                    // console.log(lastClickedPieceImageObj.id)
-                    // console.log(intersects[0].object.id)
-
                     wasSomethingClicked = true
                 }
-
                 if (intersects[0].object != undefined)
                     lastClickedPieceImageObj = intersects[0].object
                 else
                     lastClickedPieceImageObj = ""
             }
-
-
             else {
                 console.log("Ruch jest blokowany")
                 return
             }
-
-
-
-
-            // lastClickedPositionLR = intersects[0].object.positionLR
-            // lastClickedPositionRow = intersects[0].object.positionRow
         }
-
-
-
-
-        //nadpisanie na undefined'a, jeżeli ten if sie wykonał
         if (wasSomethingClicked == true)
             lastClickedPieceImageObj = "" //w celu uniknięcia 3ciego kliku psującego
         wasSomethingClicked = false
-        // console.log(lastClickedPieceImageObj)
-
     }
 
     pieceShuffling = () => {
@@ -380,36 +284,28 @@ class Game {
         console.log("SHUFFLING")
         let correctPieces = this.scene.children.filter(function (el) { return el.name == "clickable" })
         this.playerPiecesLeft = correctPieces
-        // console.log(this.playerPiecesLeft)
 
         for (let i = 0; i < this.playerPiecesLeft.length; i++) {
-
             //nazwa zdjecia
             receivedImages.push(this.playerPiecesLeft[i].pieceID)
-
-            //miejsce płytki
+            //miejsce klocka
             let positionsObj = {
                 positionLR: this.playerPiecesLeft[i].positionLR,
                 positionRow: this.playerPiecesLeft[i].positionRow,
                 positionHeight: this.playerPiecesLeft[i].positionHeight
             }
             receivedPositions.push(positionsObj)
-            // console.log(positionsObj)
 
         }
-        // console.log(receivedImages)
-        // console.log(receivedPositions)
-
         this.abortAllPieces()
         this.rebuildBoard(receivedImages, receivedPositions)
     }
 
     abortAllPieces = () => {
         wasSomethingClicked = false
-        lastClickedPieceImageObj = "" //errorDodge
+        lastClickedPieceImageObj = "" //Dodge
         for (let i = this.scene.children.length; i > 0; i--) {
             let child = this.scene.children[i];
-            // console.log(obj)
             this.scene.remove(child);
         }
     }
@@ -436,32 +332,17 @@ class Game {
             let positionHeight = rebuildPositions[i].positionHeight
 
             const piece = new Piece(this.playerID, pieceID, topMaterialPath, positionLR, positionRow, positionHeight)
-            // console.log(piece)
             piece.position.x = (positionRow * zmiennaX + 0.5 * zmiennaX);
             piece.position.y = (this.pieceH * positionHeight);
             piece.position.z = (positionLR * zmiennaZ + 0.5 * zmiennaZ);
             this.scene.add(piece)
         }
-
-        // let positionLR = j
-        // let positionRow = i
-
-        // const piece = new Piece(this.playerID, pieceID, topMaterialPath, positionLR, positionRow, level);
-        // // console.log(piece);
-        // piece.position.x = (i * zmiennaX + 0.5 * zmiennaX);
-        // piece.position.y = (pieceH * level); //pieceH + 3
-        // piece.position.z = (j * zmiennaZ + 0.5 * zmiennaZ);
-        // this.scene.add(piece);
-        // imageCounterStrike++
     }
 
     render = () => {
-        //console.log("render leci")        
         this.controls.update();
-
         //skalowanie renderera i kamery
         // console.log(window.innerHeight, window.innerWidth)
-
         this.camera.aspect = window.innerWidth / window.innerHeight;
         this.camera.updateProjectionMatrix();
         this.renderer.setSize(window.innerWidth, window.innerHeight);
