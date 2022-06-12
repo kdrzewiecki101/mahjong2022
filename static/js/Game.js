@@ -34,6 +34,7 @@ class Game {
         this.playerID;
         this.pieceH = 2.2;
         this.boards = new THREE.Group();
+        this.boards.position.y = -0.4;
         // Scena3D
         this.scene = new THREE.Scene();
         this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -46,12 +47,12 @@ class Game {
         this.renderer.setSize(window.innerWidth, window.innerHeight);
         document.getElementById("root").append(this.renderer.domElement);
         // Camera
-        this.camera.position.set(100, 100, 0);
+        this.camera.position.set(120, 100, 0);
         this.camera.lookAt(this.scene.position);
         // OrbitControls
         this.controls = new OrbitControls(this.camera, this.renderer.domElement);
         this.controls.enablePan = false;
-        this.controls.maxDistance = 80;
+        this.controls.maxDistance = 70;
         this.controls.update();
         // Raycaster
         this.raycaster = new THREE.Raycaster();
@@ -96,7 +97,7 @@ class Game {
     }
 
     createBoard = () => {
-        const geometry = new THREE.BoxGeometry(75, 3, 75);
+        const geometry = new THREE.BoxGeometry(55, 2.2, 55);
         const material = new THREE.MeshBasicMaterial({
             side: THREE.DoubleSide,
             wireframe: false,
