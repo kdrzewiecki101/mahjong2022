@@ -48,7 +48,7 @@ class Ui {
 
         this.interval = setInterval(async () => {
             let check = await net.checkUsers()
-            console.log(check.ready)
+            // console.log(check.ready)
             if (check.ready) {
                 this.afterLogin(login, check.gameboardImagesRandomized)
                 // console.log(check.gameboardImagesRandomized)
@@ -57,13 +57,13 @@ class Ui {
                 //plansza, obrazki losowe, luje muje dziekie węze
             }
         }
-            , 500)
+            , 400)
     }
 
     afterLogin(login, gameboardImagesRandomized) {
         clearInterval(this.interval)
-        console.log(login)
-        console.log(gameboardImagesRandomized)
+        // console.log(login)
+        // console.log(gameboardImagesRandomized)
         game.start(login, gameboardImagesRandomized) //Odpalenie funkcji mówiącej którym graczem będiesz
         // console.log("ZOBA TU TERA:")
         // console.log(game.hasGameStarted)

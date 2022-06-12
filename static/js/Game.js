@@ -7,14 +7,24 @@ import { Piece } from "../js/Piece.js";
 let zmiennaX = 4.6
 let zmiennaZ = 3.6
 
+//środkowe klocki zmienna
+let specialPositionRow = -0.5
+
+
+let nowClickedPositionRow
+let nowClickedPositionLR
+let nowClickedPositionHeight
+// let lastClickedPositionRow
+// let lastClickedPositionLR
+
 //global helpers
 let imageCounterStrike = 0
-let lastClickedPieceImageObj
+let lastClickedPieceImageObj = ""
 let wasSomethingClicked = false
 
 class Game {
     constructor() {
-        this.playerCurrentGameboard = [];
+        this.playerPiecesLeft = [];
         this.hasGameStarted = false;
         this.yourLogin;
         this.yourGameboardImages
@@ -30,8 +40,8 @@ class Game {
         // Scena3D
         this.scene = new THREE.Scene();
         this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        this.axes = new THREE.AxesHelper(1000)
-        this.scene.add(this.axes);
+        // this.axes = new THREE.AxesHelper(1000)
+        // this.scene.add(this.axes);
         // Renderer
         this.renderer = new THREE.WebGLRenderer({ antialiasing: true });
         this.renderer.setClearColor(0x483d8b);
@@ -61,7 +71,7 @@ class Game {
 
     start(login, gameboardImagesRandomized) {
         //console.log(login)
-        console.log("AAAAAAAAAAAAAAAAAa")
+        // console.log("AAAAAAAAAAAAAAAAAa")
         this.yourLogin = login
         this.yourGameboardImages = gameboardImagesRandomized
         this.imageCounterStrike = 0
@@ -73,24 +83,24 @@ class Game {
             this.imageCounterStrike = 0
             console.log("PIERWSZY")
             this.playerID = 1
-            this.createFloor(this.board.zeroFloor, this.pieceH * 1);
-            this.createFloor(this.board.firstFloor, this.pieceH * 2);
-            this.createFloor(this.board.secondFloor, this.pieceH * 3);
-            this.createFloor(this.board.thirdFloor, this.pieceH * 4);
-            this.createTopPiece(this.pieceH * 5);
-            this.createSidewaysPieces(this.pieceH * 1);
+            this.createFloor(this.board.zeroFloor, this.pieceH, 1);
+            this.createFloor(this.board.firstFloor, this.pieceH, 2);
+            this.createFloor(this.board.secondFloor, this.pieceH, 3);
+            this.createFloor(this.board.thirdFloor, this.pieceH, 4);
+            this.createTopPiece(this.pieceH, 5);
+            this.createSidewaysPieces(this.pieceH, 1);
         }
 
         if (login.id == 2) {
             this.imageCounterStrike = 0
             console.log("DRUGA")
             this.playerID = 2
-            this.createFloor(this.board.zeroFloor, this.pieceH * 1);
-            this.createFloor(this.board.firstFloor, this.pieceH * 2);
-            this.createFloor(this.board.secondFloor, this.pieceH * 3);
-            this.createFloor(this.board.thirdFloor, this.pieceH * 4);
-            this.createTopPiece(this.pieceH * 5);
-            this.createSidewaysPieces(this.pieceH * 1);
+            this.createFloor(this.board.zeroFloor, this.pieceH, 1);
+            this.createFloor(this.board.firstFloor, this.pieceH, 2);
+            this.createFloor(this.board.secondFloor, this.pieceH, 3);
+            this.createFloor(this.board.thirdFloor, this.pieceH, 4);
+            this.createTopPiece(this.pieceH, 5);
+            this.createSidewaysPieces(this.pieceH, 1);
         }
 
         //Wygenerować na podstawie this.gameBoard dla każdego gracza plansze
@@ -120,7 +130,7 @@ class Game {
 
 
 
-    createFloor = (floor, pieceH) => {
+    createFloor = (floor, pieceH, level) => {
         for (let i = -4; i < Number(floor.length - 4); i++) {
 
             //console.log(floor)
@@ -133,18 +143,19 @@ class Game {
                     let imageOnTopName = this.yourGameboardImages[imageCounterStrike]
                     let topMaterialPath = `./gfx/${imageOnTopName}.png`;
                     let pieceID = imageOnTopName
-                    console.log(this.playerID)
-                    console.log(imageCounterStrike)
+                    // console.log(this.playerID)
+                    // console.log(imageCounterStrike)
                     //console.log("TOP MATERIAL PATH: " + topMaterialPath)
 
                     //Tablica aktualnej planszy gracza na start:
 
+                    let positionLR = j
+                    let positionRow = i
 
-
-                    const piece = new Piece(this.playerID, pieceID, topMaterialPath);
+                    const piece = new Piece(this.playerID, pieceID, topMaterialPath, positionLR, positionRow, level);
                     // console.log(piece);
                     piece.position.x = (i * zmiennaX + 0.5 * zmiennaX);
-                    piece.position.y = (pieceH); //pieceH + 3
+                    piece.position.y = (pieceH * level); //pieceH + 3
 
                     piece.position.z = (j * zmiennaZ + 0.5 * zmiennaZ);
                     // piece.scale.set(4.7, 3, 2.3);
@@ -156,29 +167,31 @@ class Game {
         // console.log(imageCounterStrike)
     }
 
-    createTopPiece = (pieceH) => {
+    createTopPiece = (pieceH, level) => {
         let imageOnTopName = this.yourGameboardImages[imageCounterStrike]
         let topMaterialPath = `./gfx/${imageOnTopName}.png`;
         let pieceID = imageOnTopName
         imageCounterStrike++
-        const piece = new Piece(this.playerID, pieceID, topMaterialPath);
+        const piece = new Piece(this.playerID, pieceID, topMaterialPath, specialPositionRow, specialPositionRow, level);
         piece.position.x = (0); //3.5 * 5 - 17.5
-        piece.position.y = (pieceH);
+        piece.position.y = (pieceH * level);
         piece.position.z = (6.5 * 5 - 32.5);
         this.scene.add(piece);
     }
-    createSidewaysPieces = (pieceH) => {
+    createSidewaysPieces = (pieceH, level) => {
         //LEWA
         let imageOnTopNameL = this.yourGameboardImages[imageCounterStrike]
         let topMaterialPathL = `./gfx/${imageOnTopNameL}.png`;
         let pieceIDL = imageOnTopNameL
 
-        console.log("LEWY 1:")
-        console.log(imageOnTopNameL + " " + topMaterialPathL + " " + pieceIDL)
+        // console.log("LEWY 1:")
+        // console.log(imageOnTopNameL + " " + topMaterialPathL + " " + pieceIDL)
 
-        const leftPiece = new Piece(this.playerID, pieceIDL, topMaterialPathL)
+        let leftPositionLR = 6
+        let rightPositionLR = -7
+        const leftPiece = new Piece(this.playerID, pieceIDL, topMaterialPathL, leftPositionLR, specialPositionRow, level)
         leftPiece.position.x = (0); //3.5 * 5 - 17.5
-        leftPiece.position.y = (pieceH);
+        leftPiece.position.y = (pieceH * level);
         leftPiece.position.z = (6 * zmiennaZ + 0.5 * zmiennaZ);
         this.scene.add(leftPiece);
         imageCounterStrike++
@@ -187,18 +200,18 @@ class Game {
         let imageOnTopNameR = this.yourGameboardImages[imageCounterStrike]
         let topMaterialPathR = `./gfx/${imageOnTopNameR}.png`;
         let pieceIDR = imageOnTopNameR
-        const rightPiece = new Piece(this.playerID, pieceIDR, topMaterialPathR)
+        const rightPiece = new Piece(this.playerID, pieceIDR, topMaterialPathR, rightPositionLR, specialPositionRow, level)
         rightPiece.position.x = (0); //3.5 * 5 - 17.5
-        rightPiece.position.y = (pieceH);
+        rightPiece.position.y = (pieceH * level);
         rightPiece.position.z = (-7 * zmiennaZ + 0.5 * zmiennaZ);
         this.scene.add(rightPiece);
         imageCounterStrike++
         let imageOnTopNameR2 = this.yourGameboardImages[imageCounterStrike]
         let topMaterialPathR2 = `./gfx/${imageOnTopNameR2}.png`;
         let pieceIDR2 = imageOnTopNameR2
-        const rightPiece2 = new Piece(this.playerID, pieceIDR2, topMaterialPathR2)
+        const rightPiece2 = new Piece(this.playerID, pieceIDR2, topMaterialPathR2, rightPositionLR - 1, specialPositionRow, level)
         rightPiece2.position.x = (0); //3.5 * 5 - 17.5
-        rightPiece2.position.y = (pieceH);
+        rightPiece2.position.y = (pieceH * level);
         rightPiece2.position.z = (-8 * zmiennaZ + 0.5 * zmiennaZ);
         this.scene.add(rightPiece2);
         imageCounterStrike++
@@ -249,60 +262,112 @@ class Game {
         const intersects = this.raycaster.intersectObjects(this.scene.children);
         // console.log(intersects.length)
         console.log("teraz clicknięty: " + intersects[0].object.pieceID);
-        console.log(intersects)
+        // console.log(intersects[0].object)
 
         if (lastClickedPieceImageObj != undefined) {
-            //console.log(intersects[0].object)
-            //for (let i = 0; i < intersects.length; i++) {
-            if (intersects.length > 0 && intersects[0].object.name == "clickable" && lastClickedPieceImageObj.pieceID == intersects[0].object.pieceID && lastClickedPieceImageObj.id != intersects[0].object.id) { // && lastClickedPieceImageObj.pieceID == intersects[0].object.pieceID
-                // console.log(intersects[0].object.id)
 
-                intersects[0].object.removeFromParent()
-                lastClickedPieceImageObj.removeFromParent()
+            let correctPieces = this.scene.children.filter(function (el) { return el.name == "clickable" })
+            this.playerPiecesLeft = correctPieces
 
-                // intersects[0].object.material = new THREE.MeshBasicMaterial({
-                //     color: 0x00ff00, transparent: false,
-                //     opacity: 1,
-                // });
+            console.log("Position:")
+            nowClickedPositionLR = intersects[0].object.positionLR
+            nowClickedPositionRow = intersects[0].object.positionRow
+            nowClickedPositionHeight = intersects[0].object.positionHeight
+            console.log(nowClickedPositionLR + " - " + nowClickedPositionRow)
 
-                // lastClickedPieceImageObj.material = new THREE.MeshBasicMaterial({
-                //     color: 0x00ff00, transparent: false,
-                //     opacity: 1,
-                // })
+            console.log("positionLR:")
+            console.log(nowClickedPositionLR)
 
-                console.log(lastClickedPieceImageObj.id)
-                console.log(intersects[0].object.id)
+            console.log("positionRow:")
+            console.log(nowClickedPositionRow)
 
-                //Znalezienie ostatnio klikniętego elementu po jego id i podmiana jego mesha jw
-                // console.log(lastClickedPieceImageObj.id)
+            console.log("positionHeight:")
+            console.log(nowClickedPositionHeight)
 
-                //let found = intersects[0].find(element => element.object.id == lastClickedPieceImageObj.id)
-                //console.log(found)
+            // let controlRow = nowClickedPositionRow
 
-                // lastClickedPieceImageObj.id
+            let sameRowElements = this.playerPiecesLeft.filter(function (el) { return el.positionRow == nowClickedPositionRow && el.positionHeight == nowClickedPositionHeight })
+            console.log("sameRowElements:")
+            console.log(sameRowElements)
 
+            let maxInControlRow = -10
+            let minInControlRow = 10
 
-                //console.log(intersects[0].object);
-
-                //Funkcja odpowiedzialna za znalezienie elementów z piec
-
-
-
-                wasSomethingClicked = true
+            for (let i = 0; i < sameRowElements.length; i++) {
+                // console.log(sameRowElements[i].positionLR)
+                if (sameRowElements[i].positionLR > maxInControlRow)
+                    maxInControlRow = sameRowElements[i].positionLR
+                if (sameRowElements[i].positionLR < minInControlRow)
+                    minInControlRow = sameRowElements[i].positionLR
             }
-            //}
-            // console.log(intersects)
 
+            console.log("max: ")
+            console.log(maxInControlRow)
+
+            console.log("min: ")
+            console.log(minInControlRow)
+
+            if (nowClickedPositionLR == maxInControlRow || nowClickedPositionLR == minInControlRow) { //Jeżeli skrajne w swoim rzędzie
+                console.log("MOŻNA KLIKAĆ")
+                //Good Normal Match
+                if (intersects.length > 0 && intersects[0].object.name == "clickable" &&
+                    lastClickedPieceImageObj.pieceID == intersects[0].object.pieceID &&
+                    lastClickedPieceImageObj.id != intersects[0].object.id) { // && lastClickedPieceImageObj.pieceID == intersects[0].object.pieceID
+                    // console.log(intersects[0].object.id)
+
+                    console.log("DZIECIACZKI:")
+                    console.log(this.playerPiecesLeft)
+
+                    intersects[0].object.removeFromParent()
+                    lastClickedPieceImageObj.removeFromParent()
+
+                    // intersects[0].object.material = new THREE.MeshBasicMaterial({
+                    //     color: 0x00ff00, transparent: false,
+                    //     opacity: 1,
+                    // });
+
+                    // lastClickedPieceImageObj.material = new THREE.MeshBasicMaterial({
+                    //     color: 0x00ff00, transparent: false,
+                    //     opacity: 1,
+                    // })
+
+                    console.log(lastClickedPieceImageObj.id)
+                    console.log(intersects[0].object.id)
+
+                    wasSomethingClicked = true
+                }
+
+                lastClickedPieceImageObj = intersects[0].object
+            }
+
+
+            else {
+                console.log("No tak średnio")
+                return
+            }
+
+
+
+
+            // lastClickedPositionLR = intersects[0].object.positionLR
+            // lastClickedPositionRow = intersects[0].object.positionRow
         }
-        lastClickedPieceImageObj = intersects[0].object
+
 
 
 
         //nadpisanie na undefined'a, jeżeli ten if sie wykonał
         if (wasSomethingClicked == true)
-            lastClickedPieceImageObj = undefined //w celu uniknięcia 3ciego kliku psującego
+            lastClickedPieceImageObj = "" //w celu uniknięcia 3ciego kliku psującego
         wasSomethingClicked = false
         // console.log(lastClickedPieceImageObj)
+
+
+
+
+        // let michal1 = intersects[0].object.positionLR
+        // if (intersects[0].object.)
+
 
     }
     render = () => {

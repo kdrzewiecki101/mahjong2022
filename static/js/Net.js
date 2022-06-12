@@ -4,7 +4,7 @@ import { game, net, ui } from "../js/Main.js";
 class Net {
     loginUser() {
         this.nickname = ui.nickname.value;
-        console.log(this.nickname);
+        // console.log(this.nickname);
 
         this.addUser()
         // this.staryWstal()
