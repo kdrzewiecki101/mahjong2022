@@ -220,6 +220,7 @@ class Game {
         }
     }
     clickPieces = () => {
+        console.log(this.playerPiecesLeft.length);
         if (lastClickedPieceImageObj != undefined && lastClickedPieceImageObj.pieceID != undefined)
             console.log("ostatnio kliknięty: " + lastClickedPieceImageObj.pieceID)
         this.raycaster.setFromCamera(this.pointer, this.camera);
@@ -258,25 +259,23 @@ class Game {
             }
 
             if (nowClickedPositionLR == maxInControlRow || nowClickedPositionLR == minInControlRow) { //Jeżeli skrajne w swoim rzędzie
-                const idek = lastClickedPieceImageObj.pieceID;
-                const freshIdek = intersects[0].object.pieceID;
-                console.log("idek: " + idek);
-                console.log("freshIdek: " + freshIdek);
+                const lastPiecePrefix = lastClickedPieceImageObj.pieceID;
+                const currentPiecePrefix = intersects[0].object.pieceID;
                 //Normal Match
                 if (intersects.length > 0 && intersects[0].object.name == "clickable" && lastClickedPieceImageObj.pieceID == intersects[0].object.pieceID && lastClickedPieceImageObj.id != intersects[0].object.id) {
-                    console.log(lastClickedPieceImageObj.pieceID + "_" + intersects[0].object.pieceID);
                     intersects[0].object.removeFromParent()
                     lastClickedPieceImageObj.removeFromParent()
                     wasSomethingClicked = true
                 }
                 //Season Match
-                else if (lastClickedPieceImageObj.pieceID != undefined && intersects.length > 0 && intersects[0].object.name == "clickable" && lastClickedPieceImageObj.id != intersects[0].object.id && idek.substring(0, 3) == "sea" && freshIdek.substring(0, 3) == "sea") {
+                else if (lastClickedPieceImageObj.pieceID != undefined && intersects.length > 0 && intersects[0].object.name == "clickable" && lastClickedPieceImageObj.id != intersects[0].object.id && lastPiecePrefix.substring(0, 3) == "sea" && currentPiecePrefix.substring(0, 3) == "sea") {
                     console.log("DS <3");
                     intersects[0].object.removeFromParent()
                     lastClickedPieceImageObj.removeFromParent()
                     wasSomethingClicked = true
                 }
-                else if (lastClickedPieceImageObj.pieceID != undefined && intersects.length > 0 && intersects[0].object.name == "clickable" && lastClickedPieceImageObj.id != intersects[0].object.id && idek.substring(0, 3) == "flo" && freshIdek.substring(0, 3) == "flo") {
+                //Flower Match
+                else if (lastClickedPieceImageObj.pieceID != undefined && intersects.length > 0 && intersects[0].object.name == "clickable" && lastClickedPieceImageObj.id != intersects[0].object.id && lastPiecePrefix.substring(0, 3) == "flo" && currentPiecePrefix.substring(0, 3) == "flo") {
                     console.log("DSaaa <3");
                     intersects[0].object.removeFromParent()
                     lastClickedPieceImageObj.removeFromParent()
@@ -286,6 +285,10 @@ class Game {
                     lastClickedPieceImageObj = intersects[0].object
                 else
                     lastClickedPieceImageObj = ""
+
+                //Sprawdzenie pozostałości po usunięciu pary z planszy
+                let correctPieces = this.scene.children.filter(function (el) { return el.name == "clickable" })
+                this.playerPiecesLeft = correctPieces
             }
             else {
                 console.log("Ruch jest blokowany")
@@ -295,6 +298,11 @@ class Game {
         if (wasSomethingClicked == true)
             lastClickedPieceImageObj = "" //w celu uniknięcia 3ciego kliku psującego
         wasSomethingClicked = false
+        console.log(this.playerPiecesLeft);
+        if (this.playerPiecesLeft.length == 0) {
+            alert("You WON!")
+        }
+
     }
 
     pieceShuffling = () => {
@@ -303,7 +311,6 @@ class Game {
         console.log("SHUFFLING")
         let correctPieces = this.scene.children.filter(function (el) { return el.name == "clickable" })
         this.playerPiecesLeft = correctPieces
-
         for (let i = 0; i < this.playerPiecesLeft.length; i++) {
             //nazwa zdjecia
             receivedImages.push(this.playerPiecesLeft[i].pieceID)
