@@ -15,10 +15,14 @@ let nowClickedPositionRow
 let nowClickedPositionLR
 let nowClickedPositionHeight
 
+//hovery
+let lastHoveredPiece = "";
+let nowHoveredPiece = "";
 //global helpers
 let imageCounterStrike = 0
 let lastClickedPieceImageObj = ""
 let wasSomethingClicked = false
+
 
 class Game {
     constructor() {
@@ -60,11 +64,11 @@ class Game {
         // Pointer (wskaźnik)
         this.pointer = new THREE.Vector2();
         // Listeners
-        //window.addEventListener('pointermove', this.onPointerMove);
+        window.addEventListener('pointermove', this.onPointerMove);
         window.addEventListener('click', this.onPointerClick);
         // Functions
-        this.createBoard();
-        this.createButtons();
+        //this.createBoard();
+        //this.createButtons();
         this.scene.add(this.boards);
         this.render();
     }
@@ -78,6 +82,7 @@ class Game {
             console.log("PIERWSZY")
             this.playerID = 1
             this.createButtons();
+            //this.createBoard();
             this.createFloor(this.board.zeroFloor, this.pieceH, 1);
             this.createFloor(this.board.firstFloor, this.pieceH, 2);
             this.createFloor(this.board.secondFloor, this.pieceH, 3);
@@ -91,6 +96,7 @@ class Game {
             console.log("DRUGA")
             this.playerID = 2
             this.createButtons();
+            //this.createBoard();
             this.createFloor(this.board.zeroFloor, this.pieceH, 1);
             this.createFloor(this.board.firstFloor, this.pieceH, 2);
             this.createFloor(this.board.secondFloor, this.pieceH, 3);
@@ -100,24 +106,15 @@ class Game {
         }
     }
 
-    createBoard = () => {
-        const geometry = new THREE.BoxGeometry(55, 2.2, 55);
-        const material = new THREE.MeshBasicMaterial({
-            side: THREE.DoubleSide,
-            wireframe: false,
-            transparent: true,
-            opacity: 1,
-            color: 0xd2d2d2
-        });
-        const cube = new THREE.Mesh(geometry, material);
-        this.scene.add(cube);
-    }
-
     createButtons = () => {
-        const buttonReset = new Button("buttonReset", "./gfx/side.png");
-        buttonReset.position.x = 50;
-        buttonReset.position.y = -50;
-        this.scene.add(buttonReset);
+        for (let i = -1; i < 2; i++) {
+            const buttonReset = new Button("buttonReset" + i, "./gfx/side.png");
+            buttonReset.position.x = 30;
+            buttonReset.position.y = 2;
+            buttonReset.position.z = i * 10;
+            this.boards.add(buttonReset);
+            console.log(buttonReset);
+        }
     }
 
     createFloor = (floor, pieceH, level) => {
@@ -194,13 +191,13 @@ class Game {
     }
     createBoard = () => {
         const geometry = new THREE.BoxGeometry(75, 3, 75);
-        const material = new THREE.MeshBasicMaterial({
-            side: THREE.DoubleSide,
-            wireframe: false,
-            transparent: true,
-            opacity: 1,
-            color: 0xd2d2d2
-        });
+        const material = [];
+        material.push(new THREE.MeshBasicMaterial({ side: THREE.DoubleSide, map: new THREE.TextureLoader().load('./gfx/side2.png') }));
+        material.push(new THREE.MeshBasicMaterial({ side: THREE.DoubleSide, map: new THREE.TextureLoader().load('./gfx/side2.png') }));
+        material.push(new THREE.MeshBasicMaterial({ side: THREE.DoubleSide, map: new THREE.TextureLoader().load('./gfx/board.png') }));
+        material.push(new THREE.MeshBasicMaterial({ side: THREE.DoubleSide, map: new THREE.TextureLoader().load('./gfx/board.png') }));
+        material.push(new THREE.MeshBasicMaterial({ side: THREE.DoubleSide, map: new THREE.TextureLoader().load('./gfx/side3.png') }));
+        material.push(new THREE.MeshBasicMaterial({ side: THREE.DoubleSide, map: new THREE.TextureLoader().load('./gfx/side3.png') }));
         const cube = new THREE.Mesh(geometry, material);
         this.boards.add(cube);
     }
@@ -218,20 +215,29 @@ class Game {
     hoverPieces = () => {
         this.raycaster.setFromCamera(this.pointer, this.camera);
         const intersects = this.raycaster.intersectObjects(this.scene.children);
-        //console.log(intersects.length);
-        for (let i = 0; i < intersects.length; i++) {
-            if (intersects.length > 0 && intersects[0].object.name == "clickable") {
-                intersects[0].object.material = new THREE.MeshBasicMaterial({
-                    color: 0xff0000, transparent: false,
-                    opacity: 1,
-                });
-            }
+        if (nowHoveredPiece == intersects[0].object)
+            return
+        if (nowHoveredPiece && intersects[0].object.id != nowHoveredPiece.id && intersects[0].object.name == "clickable") {
+            lastHoveredPiece = nowHoveredPiece;
+            lastHoveredPiece.position.y -= 0.2;
+            let pos = lastHoveredPiece.material[2];
+            console.log(pos);
         }
+        nowHoveredPiece = intersects[0].object;
+        // console.log(intersects[0].object)
+        if (intersects[0].object.name == "clickable")
+            intersects[0].object.position.y += 0.2;
+        console.log("teraz hover: " + nowHoveredPiece.id);
+        console.log("poprzedni hover: " + lastHoveredPiece.id);
     }
     clickPieces = () => {
         console.log(this.playerPiecesLeft.length);
-        if (lastClickedPieceImageObj != undefined && lastClickedPieceImageObj.pieceID != undefined)
-            console.log("ostatnio kliknięty: " + lastClickedPieceImageObj.pieceID)
+        console.log(lastClickedPieceImageObj);
+        if (lastClickedPieceImageObj != undefined && lastClickedPieceImageObj.pieceID != undefined) {
+            console.log("ostatnio kliknięty: " + lastClickedPieceImageObj.pieceID);
+            console.log(lastClickedPieceImageObj);
+        }
+
         this.raycaster.setFromCamera(this.pointer, this.camera);
         const intersects = this.raycaster.intersectObjects(this.scene.children);
         console.log("teraz clicknięty: " + intersects[0].object.pieceID);

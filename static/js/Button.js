@@ -3,9 +3,9 @@ class Button extends THREE.Mesh {
     constructor(buttonID, topMaterialPath) {
         super()
         this.buttonID = buttonID
-        this.name = "clickable";
+        //this.name = "clickable";
         this.topMaterialPath = topMaterialPath;
-        this.geometry = new THREE.BoxGeometry(50, 5, 40);
+        this.geometry = new THREE.BoxGeometry(3, 1, 8);
         this.material = [];
         this.material.push(new THREE.MeshBasicMaterial({ side: THREE.DoubleSide, map: new THREE.TextureLoader().load('./gfx/side2.png') }));
         this.material.push(new THREE.MeshBasicMaterial({ side: THREE.DoubleSide, map: new THREE.TextureLoader().load('./gfx/side2.png') }));
