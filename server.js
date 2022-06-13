@@ -1,8 +1,9 @@
 var express = require("express")
 var app = express();
 const PORT = 3000;
+const path = require("path");
 let users = [];
-app.use(express.static('static'));
+app.use(express.static(path.join(__dirname, './static')));
 app.use(express.text());
 const images = [
     { name: "bamboo1", multiplicity: 4 },
