@@ -7,7 +7,9 @@
 body {
     margin: 0 auto;
     font-family: 'Courier New', Courier, monospace;
-    background-color: #483d8b;
+    /* background-color: #483d8b; */
+    background-image: url("gfx/background3.jpg");
+    background-repeat: no-repeat;
     color: #ffffff;
     overflow: hidden;
 }
