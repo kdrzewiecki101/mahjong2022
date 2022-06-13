@@ -32,7 +32,7 @@ class Net {
 
     checkUsers = async () => {
         let check = false;
-        const response = await fetch("/check")
+        const response = await fetch("/checkLogins")
 
         if (!response.ok) {
             return response.status
@@ -41,7 +41,19 @@ class Net {
             let jsonCheck = await response.json() // response.json
             return jsonCheck
         }
+    }
 
+    checkWin = async () => {
+        let check = false;
+        const response = await fetch("/checkWin")
+
+        if (!response.ok) {
+            return response.status
+        }
+        else {
+            let jsonCheck = await response.json() // response.json
+            return jsonCheck
+        }
     }
 
     reset = async () => {

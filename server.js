@@ -101,7 +101,7 @@ app.post("/addUser", (req, res) => {
     }
 })
 
-app.get("/check", (req, res) => {
+app.get("/checkLogins", (req, res) => {
     if (users.length == 2) {
         console.log("GOTOWOŚĆ DO GRY")
         console.log(doublePlayerGameboard)
@@ -110,6 +110,10 @@ app.get("/check", (req, res) => {
     else {
         res.send(JSON.stringify({ ready: false }))
     }
+
+})
+
+app.get("/checkWin", (req, res) => {
 
 })
 

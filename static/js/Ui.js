@@ -48,8 +48,7 @@ class Ui {
             if (check.ready) {
                 this.afterLogin(login, check.gameboardImagesRandomized)
             }
-        }
-            , 400)
+        }, 500)
     }
 
     afterLogin(login, gameboardImagesRandomized) {
@@ -58,6 +57,16 @@ class Ui {
         game.hasGameStarted = true;
         this.addiction.remove()
         this.loginInterface.remove()
+
+        //Rozpoczęcie sprawdzania, czy ktoś nie wygrał
+        this.interval = setInterval(async () => {
+            let checkW = await net.checkWin()
+            // console.log(check.ready)
+            if (checkW.ready) {
+                this.afterLogin(login, check.gameboardImagesRandomized)
+            }
+            console.log("Wygrał ktoś?")
+        }, 1000)
     }
 }
 
