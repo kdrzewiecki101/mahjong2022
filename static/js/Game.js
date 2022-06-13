@@ -52,7 +52,7 @@ class Game {
         this.renderer.setSize(window.innerWidth, window.innerHeight);
         document.getElementById("root").append(this.renderer.domElement);
         // Camera
-        this.camera.position.set(120, 100, 0);
+        this.camera.position.set(-120, 100, 0);
         this.camera.lookAt(this.scene.position);
         // OrbitControls
         this.controls = new OrbitControls(this.camera, this.renderer.domElement);
@@ -82,7 +82,7 @@ class Game {
             console.log("PIERWSZY")
             this.playerID = 1
             this.createButtons();
-            //this.createBoard();
+            this.createBoard();
             this.createFloor(this.board.zeroFloor, this.pieceH, 1);
             this.createFloor(this.board.firstFloor, this.pieceH, 2);
             this.createFloor(this.board.secondFloor, this.pieceH, 3);
@@ -96,7 +96,7 @@ class Game {
             console.log("DRUGA")
             this.playerID = 2
             this.createButtons();
-            //this.createBoard();
+            this.createBoard();
             this.createFloor(this.board.zeroFloor, this.pieceH, 1);
             this.createFloor(this.board.firstFloor, this.pieceH, 2);
             this.createFloor(this.board.secondFloor, this.pieceH, 3);
@@ -108,8 +108,8 @@ class Game {
 
     createButtons = () => {
         for (let i = -1; i < 2; i++) {
-            const buttonReset = new Button("buttonReset" + i, "./gfx/side.png");
-            buttonReset.position.x = 30;
+            const buttonReset = new Button("buttonReset" + i, "./gfx/button.png");
+            buttonReset.position.x = -30;
             buttonReset.position.y = 2;
             buttonReset.position.z = i * 10;
             this.boards.add(buttonReset);
@@ -215,18 +215,52 @@ class Game {
     hoverPieces = () => {
         this.raycaster.setFromCamera(this.pointer, this.camera);
         const intersects = this.raycaster.intersectObjects(this.scene.children);
-        if (nowHoveredPiece == intersects[0].object)
+        if (nowHoveredPiece != undefined && nowHoveredPiece == intersects[0].object)
             return
-        if (nowHoveredPiece && intersects[0].object.id != nowHoveredPiece.id && intersects[0].object.name == "clickable") {
+        if (nowHoveredPiece) {
             lastHoveredPiece = nowHoveredPiece;
-            lastHoveredPiece.position.y -= 0.2;
-            let pos = lastHoveredPiece.material[2];
-            console.log(pos);
+            lastHoveredPiece.position.y -= 0.3;
+            nowHoveredPiece = "";
         }
+        if (intersects[0].object.name != "clickable")
+            return
+        // lastHoveredPiece.position.y -= 0.2;
+        console.log(intersects[0].object.id);
+        let correctPieces = this.scene.children.filter(function (el) { return el.name == "clickable" })
+        this.playerPiecesLeft = correctPieces
+        nowClickedPositionLR = intersects[0].object.positionLR
+        nowClickedPositionRow = intersects[0].object.positionRow
+        nowClickedPositionHeight = intersects[0].object.positionHeight
+        console.log(nowClickedPositionLR + " " + nowClickedPositionRow + " " + nowClickedPositionHeight)  //Wyświetlanie Wszystkich parametrow pozycji klikniętego klocka
+
+        let sameRowElements = this.playerPiecesLeft.filter(function (el) {
+            return (el.positionRow == nowClickedPositionRow && el.positionHeight == nowClickedPositionHeight) ||
+                (el.positionRow == nowClickedPositionRow - 0.5 && el.positionHeight == nowClickedPositionHeight) || // klocki specjalnej troski
+                (el.positionRow == nowClickedPositionRow + 0.5 && el.positionHeight == nowClickedPositionHeight)
+        })
+
+        let topSpecialPiece = this.playerPiecesLeft.find(el => el.positionHeight == 5) //Szczyt piramidy 
+
+        if (topSpecialPiece != undefined && nowClickedPositionHeight == 4) { //jeżeli istnieje szczyt piramidy
+            console.log("Ruch jest blokowany")
+            return
+        }
+
+        let maxInControlRow = -10
+        let minInControlRow = 10
+
+        for (let i = 0; i < sameRowElements.length; i++) {
+            if (sameRowElements[i].positionLR > maxInControlRow)
+                maxInControlRow = sameRowElements[i].positionLR
+            if (sameRowElements[i].positionLR < minInControlRow)
+                minInControlRow = sameRowElements[i].positionLR
+        }
+        if (nowClickedPositionLR != maxInControlRow && nowClickedPositionLR != minInControlRow)
+            return
         nowHoveredPiece = intersects[0].object;
-        // console.log(intersects[0].object)
-        if (intersects[0].object.name == "clickable")
-            intersects[0].object.position.y += 0.2;
+        console.log(intersects[0].object)
+
+        intersects[0].object.position.y += 0.3;
         console.log("teraz hover: " + nowHoveredPiece.id);
         console.log("poprzedni hover: " + lastHoveredPiece.id);
     }
