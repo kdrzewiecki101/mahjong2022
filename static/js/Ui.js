@@ -59,6 +59,8 @@ class Ui {
         this.loginInterface.remove()
 
         //Rozpoczęcie sprawdzania, czy ktoś nie wygrał
+        //To można całe do net.js chyba wrzucić
+
         this.interval = setInterval(async () => {
             console.log("Wygrał ktoś?")
             if (game.hasGameEnded) {
@@ -68,6 +70,7 @@ class Ui {
                 clearInterval(this.interval)
             }
         }, 1000)
+
     }
 }
 
