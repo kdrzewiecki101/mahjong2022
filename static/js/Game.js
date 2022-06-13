@@ -2,6 +2,7 @@ import { OrbitControls } from "../js/OrbitControls.js";
 import { Board } from "../js/Board.js";
 import * as THREE from '../js/three.module.js';
 import { Piece } from "../js/Piece.js";
+import { Button } from "../js/Button.js"
 
 let zmiennaX = 4.6
 let zmiennaZ = 3.6
@@ -63,6 +64,7 @@ class Game {
         window.addEventListener('click', this.onPointerClick);
         // Functions
         this.createBoard();
+        this.createButtons();
         this.scene.add(this.boards);
         this.render();
     }
@@ -75,6 +77,7 @@ class Game {
             this.imageCounterStrike = 0
             console.log("PIERWSZY")
             this.playerID = 1
+            this.createButtons();
             this.createFloor(this.board.zeroFloor, this.pieceH, 1);
             this.createFloor(this.board.firstFloor, this.pieceH, 2);
             this.createFloor(this.board.secondFloor, this.pieceH, 3);
@@ -87,6 +90,7 @@ class Game {
             this.imageCounterStrike = 0
             console.log("DRUGA")
             this.playerID = 2
+            this.createButtons();
             this.createFloor(this.board.zeroFloor, this.pieceH, 1);
             this.createFloor(this.board.firstFloor, this.pieceH, 2);
             this.createFloor(this.board.secondFloor, this.pieceH, 3);
@@ -109,7 +113,12 @@ class Game {
         this.scene.add(cube);
     }
 
-
+    createButtons = () => {
+        const buttonReset = new Button("buttonReset", "./gfx/side.png");
+        buttonReset.position.x = 50;
+        buttonReset.position.y = -50;
+        this.scene.add(buttonReset);
+    }
 
     createFloor = (floor, pieceH, level) => {
         for (let i = -4; i < Number(floor.length - 4); i++) {
