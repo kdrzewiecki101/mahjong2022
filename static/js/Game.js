@@ -34,6 +34,7 @@ class Game {
         this.playerID;
         this.pieceH = 2.2;
         this.boards = new THREE.Group();
+        this.boards.position.y = -0.4;
         // Scena3D
         this.scene = new THREE.Scene();
         this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -46,12 +47,12 @@ class Game {
         this.renderer.setSize(window.innerWidth, window.innerHeight);
         document.getElementById("root").append(this.renderer.domElement);
         // Camera
-        this.camera.position.set(100, 100, 0);
+        this.camera.position.set(120, 100, 0);
         this.camera.lookAt(this.scene.position);
         // OrbitControls
         this.controls = new OrbitControls(this.camera, this.renderer.domElement);
         this.controls.enablePan = false;
-        this.controls.maxDistance = 80;
+        this.controls.maxDistance = 70;
         this.controls.update();
         // Raycaster
         this.raycaster = new THREE.Raycaster();
@@ -96,7 +97,7 @@ class Game {
     }
 
     createBoard = () => {
-        const geometry = new THREE.BoxGeometry(75, 3, 75);
+        const geometry = new THREE.BoxGeometry(55, 2.2, 55);
         const material = new THREE.MeshBasicMaterial({
             side: THREE.DoubleSide,
             wireframe: false,
@@ -219,7 +220,7 @@ class Game {
         }
     }
     clickPieces = () => {
-        if (lastClickedPieceImageObj != undefined)
+        if (lastClickedPieceImageObj != undefined && lastClickedPieceImageObj.pieceID != undefined)
             console.log("ostatnio kliknięty: " + lastClickedPieceImageObj.pieceID)
         this.raycaster.setFromCamera(this.pointer, this.camera);
         const intersects = this.raycaster.intersectObjects(this.scene.children);
@@ -257,8 +258,26 @@ class Game {
             }
 
             if (nowClickedPositionLR == maxInControlRow || nowClickedPositionLR == minInControlRow) { //Jeżeli skrajne w swoim rzędzie
+                const idek = lastClickedPieceImageObj.pieceID;
+                const freshIdek = intersects[0].object.pieceID;
+                console.log("idek: " + idek);
+                console.log("freshIdek: " + freshIdek);
                 //Normal Match
                 if (intersects.length > 0 && intersects[0].object.name == "clickable" && lastClickedPieceImageObj.pieceID == intersects[0].object.pieceID && lastClickedPieceImageObj.id != intersects[0].object.id) {
+                    console.log(lastClickedPieceImageObj.pieceID + "_" + intersects[0].object.pieceID);
+                    intersects[0].object.removeFromParent()
+                    lastClickedPieceImageObj.removeFromParent()
+                    wasSomethingClicked = true
+                }
+                //Season Match
+                else if (lastClickedPieceImageObj.pieceID != undefined && intersects.length > 0 && intersects[0].object.name == "clickable" && lastClickedPieceImageObj.id != intersects[0].object.id && idek.substring(0, 3) == "sea" && freshIdek.substring(0, 3) == "sea") {
+                    console.log("DS <3");
+                    intersects[0].object.removeFromParent()
+                    lastClickedPieceImageObj.removeFromParent()
+                    wasSomethingClicked = true
+                }
+                else if (lastClickedPieceImageObj.pieceID != undefined && intersects.length > 0 && intersects[0].object.name == "clickable" && lastClickedPieceImageObj.id != intersects[0].object.id && idek.substring(0, 3) == "flo" && freshIdek.substring(0, 3) == "flo") {
+                    console.log("DSaaa <3");
                     intersects[0].object.removeFromParent()
                     lastClickedPieceImageObj.removeFromParent()
                     wasSomethingClicked = true
