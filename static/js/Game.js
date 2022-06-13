@@ -220,7 +220,7 @@ class Game {
         }
     }
     clickPieces = () => {
-        if (lastClickedPieceImageObj != undefined)
+        if (lastClickedPieceImageObj != undefined && lastClickedPieceImageObj.pieceID != undefined)
             console.log("ostatnio kliknięty: " + lastClickedPieceImageObj.pieceID)
         this.raycaster.setFromCamera(this.pointer, this.camera);
         const intersects = this.raycaster.intersectObjects(this.scene.children);
@@ -258,8 +258,26 @@ class Game {
             }
 
             if (nowClickedPositionLR == maxInControlRow || nowClickedPositionLR == minInControlRow) { //Jeżeli skrajne w swoim rzędzie
+                const idek = lastClickedPieceImageObj.pieceID;
+                const freshIdek = intersects[0].object.pieceID;
+                console.log("idek: " + idek);
+                console.log("freshIdek: " + freshIdek);
                 //Normal Match
                 if (intersects.length > 0 && intersects[0].object.name == "clickable" && lastClickedPieceImageObj.pieceID == intersects[0].object.pieceID && lastClickedPieceImageObj.id != intersects[0].object.id) {
+                    console.log(lastClickedPieceImageObj.pieceID + "_" + intersects[0].object.pieceID);
+                    intersects[0].object.removeFromParent()
+                    lastClickedPieceImageObj.removeFromParent()
+                    wasSomethingClicked = true
+                }
+                //Season Match
+                else if (lastClickedPieceImageObj.pieceID != undefined && intersects.length > 0 && intersects[0].object.name == "clickable" && lastClickedPieceImageObj.id != intersects[0].object.id && idek.substring(0, 3) == "sea" && freshIdek.substring(0, 3) == "sea") {
+                    console.log("DS <3");
+                    intersects[0].object.removeFromParent()
+                    lastClickedPieceImageObj.removeFromParent()
+                    wasSomethingClicked = true
+                }
+                else if (lastClickedPieceImageObj.pieceID != undefined && intersects.length > 0 && intersects[0].object.name == "clickable" && lastClickedPieceImageObj.id != intersects[0].object.id && idek.substring(0, 3) == "flo" && freshIdek.substring(0, 3) == "flo") {
+                    console.log("DSaaa <3");
                     intersects[0].object.removeFromParent()
                     lastClickedPieceImageObj.removeFromParent()
                     wasSomethingClicked = true
