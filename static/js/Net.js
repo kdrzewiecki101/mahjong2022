@@ -43,18 +43,59 @@ class Net {
         }
     }
 
-    checkWin = async () => {
-        let check = false;
-        const response = await fetch("/checkWin")
+    addWinner = async (playerID) => {
+        const data = JSON.stringify({
+            winnerID: playerID
+        })
 
-        if (!response.ok) {
+        const options = {
+            method: "POST",
+            body: data,
+        };
+
+        let response = await fetch("/addWinner", options)
+
+        if (!response.ok)
             return response.status
-        }
         else {
-            let jsonCheck = await response.json() // response.json
-            return jsonCheck
+            let jsonAdd = await response.json() // response.json
+            // console.log(jsonAdd)
+            return
         }
     }
+
+    checkForWinner = () => {
+        this.interval = setInterval(async () => {
+            if (game.hasGameEnded) {
+                console.log(game.gameOver())
+                clearInterval(this.interval)
+                this.addWinner(game.gameOver())
+            }
+        }, 1000)
+    }
+
+    checkWhoWon = async () => {
+        this.interval2 = setInterval(async () => {
+            const response = await fetch("/checkForWinner")
+
+            if (!response.ok) {
+                return response.status
+            }
+            else {
+                let jsonCheck = await response.json() // response.json
+                console.log(jsonCheck)
+                clearInterval(this.interval2)
+
+                if (game.playerID == jsonCheck.winner)
+                    alert("ZWYCIĘZCA")
+                else
+                    alert("Przegryw")
+                return jsonCheck
+
+            }
+        }, 1000)
+    }
+
 
     reset = async () => {
         const response = await fetch("/reset")

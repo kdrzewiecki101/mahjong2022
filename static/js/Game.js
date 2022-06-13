@@ -19,7 +19,6 @@ let imageCounterStrike = 0
 let lastClickedPieceImageObj = ""
 let wasSomethingClicked = false
 
-
 class Game {
     constructor() {
         this.playerPiecesLeft = [];
@@ -302,7 +301,7 @@ class Game {
         wasSomethingClicked = false
         console.log(this.playerPiecesLeft);
         if (this.playerPiecesLeft.length == 142) {
-            alert("You WON!")
+            // alert("You WON!")
             this.hasGameEnded = true
         }
 
@@ -380,9 +379,9 @@ class Game {
         requestAnimationFrame(this.render);
     }
 
-    gameOver = (login) => {
-        console.log("WYGRANA Game")
-        return login
+    gameOver = () => {
+        // console.log("WYGRYWA GRACZ: " + this.playerID)
+        return this.playerID
     }
 }
 
