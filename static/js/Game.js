@@ -19,10 +19,12 @@ let imageCounterStrike = 0
 let lastClickedPieceImageObj = ""
 let wasSomethingClicked = false
 
+
 class Game {
     constructor() {
         this.playerPiecesLeft = [];
         this.hasGameStarted = false;
+        this.hasGameEnded = false;
         this.yourLogin;
         this.yourGameboardImages
         this.floor = [];
@@ -34,6 +36,7 @@ class Game {
         this.playerID;
         this.pieceH = 2.2;
         this.boards = new THREE.Group();
+        this.boards.position.y = -0.4;
         // Scena3D
         this.scene = new THREE.Scene();
         this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -46,12 +49,12 @@ class Game {
         this.renderer.setSize(window.innerWidth, window.innerHeight);
         document.getElementById("root").append(this.renderer.domElement);
         // Camera
-        this.camera.position.set(100, 100, 0);
+        this.camera.position.set(120, 100, 0);
         this.camera.lookAt(this.scene.position);
         // OrbitControls
         this.controls = new OrbitControls(this.camera, this.renderer.domElement);
         this.controls.enablePan = false;
-        this.controls.maxDistance = 80;
+        this.controls.maxDistance = 70;
         this.controls.update();
         // Raycaster
         this.raycaster = new THREE.Raycaster();
@@ -96,7 +99,7 @@ class Game {
     }
 
     createBoard = () => {
-        const geometry = new THREE.BoxGeometry(75, 3, 75);
+        const geometry = new THREE.BoxGeometry(55, 2.2, 55);
         const material = new THREE.MeshBasicMaterial({
             side: THREE.DoubleSide,
             wireframe: false,
@@ -219,7 +222,8 @@ class Game {
         }
     }
     clickPieces = () => {
-        if (lastClickedPieceImageObj != undefined)
+        console.log(this.playerPiecesLeft.length);
+        if (lastClickedPieceImageObj != undefined && lastClickedPieceImageObj.pieceID != undefined)
             console.log("ostatnio kliknięty: " + lastClickedPieceImageObj.pieceID)
         this.raycaster.setFromCamera(this.pointer, this.camera);
         const intersects = this.raycaster.intersectObjects(this.scene.children);
@@ -257,8 +261,24 @@ class Game {
             }
 
             if (nowClickedPositionLR == maxInControlRow || nowClickedPositionLR == minInControlRow) { //Jeżeli skrajne w swoim rzędzie
+                const lastPiecePrefix = lastClickedPieceImageObj.pieceID;
+                const currentPiecePrefix = intersects[0].object.pieceID;
                 //Normal Match
                 if (intersects.length > 0 && intersects[0].object.name == "clickable" && lastClickedPieceImageObj.pieceID == intersects[0].object.pieceID && lastClickedPieceImageObj.id != intersects[0].object.id) {
+                    intersects[0].object.removeFromParent()
+                    lastClickedPieceImageObj.removeFromParent()
+                    wasSomethingClicked = true
+                }
+                //Season Match
+                else if (lastClickedPieceImageObj.pieceID != undefined && intersects.length > 0 && intersects[0].object.name == "clickable" && lastClickedPieceImageObj.id != intersects[0].object.id && lastPiecePrefix.substring(0, 3) == "sea" && currentPiecePrefix.substring(0, 3) == "sea") {
+                    console.log("DS <3");
+                    intersects[0].object.removeFromParent()
+                    lastClickedPieceImageObj.removeFromParent()
+                    wasSomethingClicked = true
+                }
+                //Flower Match
+                else if (lastClickedPieceImageObj.pieceID != undefined && intersects.length > 0 && intersects[0].object.name == "clickable" && lastClickedPieceImageObj.id != intersects[0].object.id && lastPiecePrefix.substring(0, 3) == "flo" && currentPiecePrefix.substring(0, 3) == "flo") {
+                    console.log("DSaaa <3");
                     intersects[0].object.removeFromParent()
                     lastClickedPieceImageObj.removeFromParent()
                     wasSomethingClicked = true
@@ -267,6 +287,10 @@ class Game {
                     lastClickedPieceImageObj = intersects[0].object
                 else
                     lastClickedPieceImageObj = ""
+
+                //Sprawdzenie pozostałości po usunięciu pary z planszy
+                let correctPieces = this.scene.children.filter(function (el) { return el.name == "clickable" })
+                this.playerPiecesLeft = correctPieces
             }
             else {
                 console.log("Ruch jest blokowany")
@@ -276,6 +300,12 @@ class Game {
         if (wasSomethingClicked == true)
             lastClickedPieceImageObj = "" //w celu uniknięcia 3ciego kliku psującego
         wasSomethingClicked = false
+        console.log(this.playerPiecesLeft);
+        if (this.playerPiecesLeft.length == 142) {
+            alert("You WON!")
+            this.hasGameEnded = true
+        }
+
     }
 
     pieceShuffling = () => {
@@ -284,7 +314,6 @@ class Game {
         console.log("SHUFFLING")
         let correctPieces = this.scene.children.filter(function (el) { return el.name == "clickable" })
         this.playerPiecesLeft = correctPieces
-
         for (let i = 0; i < this.playerPiecesLeft.length; i++) {
             //nazwa zdjecia
             receivedImages.push(this.playerPiecesLeft[i].pieceID)
@@ -349,6 +378,11 @@ class Game {
 
         this.renderer.render(this.scene, this.camera);
         requestAnimationFrame(this.render);
+    }
+
+    gameOver = (login) => {
+        console.log("WYGRANA Game")
+        return login
     }
 }
 

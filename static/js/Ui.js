@@ -60,12 +60,13 @@ class Ui {
 
         //Rozpoczęcie sprawdzania, czy ktoś nie wygrał
         this.interval = setInterval(async () => {
-            let checkW = await net.checkWin()
-            // console.log(check.ready)
-            if (checkW.ready) {
-                this.afterLogin(login, check.gameboardImagesRandomized)
-            }
             console.log("Wygrał ktoś?")
+            if (game.hasGameEnded) {
+                console.log("WYGRANA UI")
+                // console.log(game.gameOver(game.playerID))
+                game.gameOver(game.playerID) //Zakończenie gry
+                clearInterval(this.interval)
+            }
         }, 1000)
     }
 }

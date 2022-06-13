@@ -114,7 +114,9 @@ app.get("/checkLogins", (req, res) => {
 })
 
 app.get("/checkWin", (req, res) => {
-
+    console.log("CheckWin")
+    let x = "id00003"
+    res.send(JSON.stringify({ hasGameStarted: false, winner: x }))
 })
 
 app.get("/reset", (req, res) => {
