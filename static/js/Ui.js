@@ -48,8 +48,7 @@ class Ui {
             if (check.ready) {
                 this.afterLogin(login, check.gameboardImagesRandomized)
             }
-        }
-            , 400)
+        }, 500)
     }
 
     afterLogin(login, gameboardImagesRandomized) {
@@ -58,6 +57,14 @@ class Ui {
         game.hasGameStarted = true;
         this.addiction.remove()
         this.loginInterface.remove()
+
+        //Rozpoczęcie sprawdzania, czy ktoś nie wygrał
+        net.checkForWinner()
+
+        //Sprawdzenie kto wygrał, komunikat
+        net.checkWhoWon()
+
+
     }
 }
 

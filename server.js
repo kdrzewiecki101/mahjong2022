@@ -57,6 +57,7 @@ const images = [
 
 ]
 let doublePlayerGameboard = []
+let winner = "";
 
 function randomizeBoardImages() {
     const startingItemsArray = []
@@ -102,10 +103,10 @@ app.post("/addUser", (req, res) => {
     }
 })
 
-app.get("/check", (req, res) => {
+app.get("/checkLogins", (req, res) => {
     if (users.length == 2) {
         console.log("GOTOWOŚĆ DO GRY")
-        console.log(doublePlayerGameboard)
+        //console.log(doublePlayerGameboard)
         res.send(JSON.stringify({ ready: true, gameboardImagesRandomized: doublePlayerGameboard }))
     }
     else {
@@ -114,7 +115,25 @@ app.get("/check", (req, res) => {
 
 })
 
+app.get("/checkForWinner", (req, res) => {
+    if (winner != "") {
+        // console.log("Koniec wyslij mu info")
+        res.send(JSON.stringify({ winner: winner }))
+    }
+    else
+        res.send("Stary jeszcze nie pora")
+})
+
+app.post("/addWinner", (req, res) => {
+    // console.log(JSON.parse(req.body).winnerID)
+    winner = JSON.parse(req.body).winnerID
+    //console.log("WINNER: ")
+    //console.log(winner)
+    res.send(JSON.stringify({ winner: winner }))
+})
+
 app.get("/reset", (req, res) => {
+    winner = ""
     console.log("reset")
     users = [];
     res.send(JSON.stringify({ hasGameStarted: false }))

@@ -28,6 +28,7 @@ class Game {
     constructor() {
         this.playerPiecesLeft = [];
         this.hasGameStarted = false;
+        this.hasGameEnded = false;
         this.yourLogin;
         this.yourGameboardImages
         this.floor = [];
@@ -271,7 +272,6 @@ class Game {
             console.log("ostatnio kliknięty: " + lastClickedPieceImageObj.pieceID);
             console.log(lastClickedPieceImageObj);
         }
-
         this.raycaster.setFromCamera(this.pointer, this.camera);
         const intersects = this.raycaster.intersectObjects(this.scene.children);
         console.log("teraz clicknięty: " + intersects[0].object.pieceID);
@@ -348,10 +348,10 @@ class Game {
             lastClickedPieceImageObj = "" //w celu uniknięcia 3ciego kliku psującego
         wasSomethingClicked = false
         console.log(this.playerPiecesLeft);
-        if (this.playerPiecesLeft.length == 0) {
-            alert("You WON!")
+        if (this.playerPiecesLeft.length == 142) {
+            // alert("You WON!")
+            this.hasGameEnded = true
         }
-
     }
 
     pieceShuffling = () => {
@@ -424,6 +424,11 @@ class Game {
 
         this.renderer.render(this.scene, this.camera);
         requestAnimationFrame(this.render);
+    }
+
+    gameOver = () => {
+        // console.log("WYGRYWA GRACZ: " + this.playerID)
+        return this.playerID
     }
 }
 
