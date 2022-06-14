@@ -136,6 +136,7 @@ app.get("/checkForWinner", (req, res) => {
             console.log(newDoc)
             console.log("losowe id dokumentu: " + newDoc._id)
         });
+
         res.send(JSON.stringify({ winner: winner }))
     }
     else
@@ -158,6 +159,17 @@ app.get("/reset", (req, res) => {
 })
 
 
+app.get("/results", (req, res) => {
+    results.find({}, function (err, docs) {
+        console.log("----- tablica obiektów pobrana z bazy: \n")
+        console.log(docs)
+        console.log("----- sformatowany z wcięciami obiekt JSON: \n")
+        console.log(JSON.stringify({ "docsy": docs }, null, 5))
+        // return JSON.stringify({ "docsy": docs }, null, 5)
+        res.send(JSON.stringify({ results: docs }))
+    });
+    // res.send(JSON.stringify({ results: sendBackResults }))
+})
 
 
 

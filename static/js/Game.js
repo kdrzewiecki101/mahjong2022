@@ -3,6 +3,7 @@ import { Board } from "../js/Board.js";
 import * as THREE from '../js/three.module.js';
 import { Piece } from "../js/Piece.js";
 import { Button } from "../js/Button.js"
+import { net, ui } from "../js/Main.js";
 
 let zmiennaX = 4.6
 let zmiennaZ = 3.6
@@ -243,7 +244,7 @@ class Game {
         if (intersects[0].object.name != "clickable")
             return
         // lastHoveredPiece.position.y -= 0.2;
-        console.log(intersects[0].object);
+        // console.log(intersects[0].object);
         let correctPieces = this.scene.children.filter(function (el) { return el.name == "clickable" })
         this.playerPiecesLeft = correctPieces
         nowClickedPositionLR = intersects[0].object.positionLR
@@ -279,11 +280,11 @@ class Game {
         if (nowClickedPositionLR != maxInControlRow && nowClickedPositionLR != minInControlRow) // && sameRowElements[i].positionHeight != maxHeightControl
             return
         nowHoveredPiece = intersects[0].object;
-        console.log(intersects[0].object)
+        // console.log(intersects[0].object)
 
         intersects[0].object.position.y += 0.3;
-        console.log("teraz hover: " + nowHoveredPiece.id);
-        console.log("poprzedni hover: " + lastHoveredPiece.id);
+        // console.log("teraz hover: " + nowHoveredPiece.id);
+        // console.log("poprzedni hover: " + lastHoveredPiece.id);
     }
     clickPieces = () => {
         console.log(this.playerPiecesLeft.length);
@@ -297,6 +298,13 @@ class Game {
         console.log("teraz clicknięty: " + intersects[0].object.pieceID);
 
         if (lastClickedPieceImageObj != undefined) {
+            if (intersects[0].object.buttonID == "resetButton")
+                net.reset()
+            console.log(intersects[0].object.buttonID)
+            if (intersects[0].object.buttonID == "scoreButton")
+                net.showResults()
+            if (intersects[0].object.buttonID == "helpButton")
+                net.instructions()
             let correctPieces = this.scene.children.filter(function (el) { return el.name == "clickable" })
             this.playerPiecesLeft = correctPieces
             nowClickedPositionLR = intersects[0].object.positionLR
@@ -367,7 +375,7 @@ class Game {
         if (wasSomethingClicked == true)
             lastClickedPieceImageObj = "" //w celu uniknięcia 3ciego kliku psującego
         wasSomethingClicked = false
-        console.log(this.playerPiecesLeft);
+        //console.log(this.playerPiecesLeft);
         if (this.playerPiecesLeft.length == 142) {
             // alert("You WON!")
             this.hasGameEnded = true

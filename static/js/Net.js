@@ -90,12 +90,32 @@ class Net {
                     alert("ZWYCIĘZCA")
                 else
                     alert("Przegryw")
+                //this.showResults() //To wziąć stąd i odpalać na kliknięciu jakiegoś buttona
                 return jsonCheck
 
             }
         }, 1000)
     }
 
+    showResults = async () => {
+        const response = await fetch("/results")
+
+        if (!response.ok) {
+            return response.status
+        }
+        else {
+            let jsonCheck = await response.json() // response.json
+            game.hasGameStarted = false;
+            console.log(jsonCheck)
+            alert(JSON.stringify(jsonCheck, null, 5))
+            return jsonCheck
+        }
+    }
+
+    instructions = () => {
+        //Tu powinien być niby fetch na serwer, i tam tego implementacja ale to tam w/e
+        alert("PRESS 'S' to SHUFFLE !")
+    }
 
     reset = async () => {
         const response = await fetch("/reset")

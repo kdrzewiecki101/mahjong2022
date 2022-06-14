@@ -12,7 +12,10 @@ window.onload = () => {
     ui = new Ui();
 
     document.addEventListener("keypress", function (event) {
-        // console.log(event.keyCode)
+        console.log(event.keyCode)
+        if (event.keyCode == 114) {
+            net.showResults()
+        }
         if (event.keyCode == 115) {
             game.pieceShuffling()
         }
