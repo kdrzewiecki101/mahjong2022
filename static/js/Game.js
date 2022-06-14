@@ -69,10 +69,17 @@ class Game {
         // Functions
         //this.createBoard();
         //this.createButtons();
+        this.helpButton();
         this.scene.add(this.boards);
         this.render();
     }
 
+    helpButton = () => {
+        let btn = document.getElementById("helpBt");
+        btn.addEventListener("click", function () {
+            alert("PRESS 'S' to SHUFFLE!")
+        })
+    }
     start(login, gameboardImagesRandomized) {
         this.yourLogin = login
         this.yourGameboardImages = gameboardImagesRandomized
@@ -107,14 +114,24 @@ class Game {
     }
 
     createButtons = () => {
-        for (let i = -1; i < 2; i++) {
-            const buttonReset = new Button("buttonReset" + i, "./gfx/button.png");
-            buttonReset.position.x = -30;
-            buttonReset.position.y = 2;
-            buttonReset.position.z = i * 10;
-            this.boards.add(buttonReset);
-            console.log(buttonReset);
-        }
+        const buttonReset = new Button("resetButton", "./gfx/reset.png");
+        buttonReset.position.x = -30;
+        buttonReset.position.y = 2;
+        buttonReset.position.z = -1 * 10;
+        this.boards.add(buttonReset);
+        console.log(buttonReset);
+        const buttonReset2 = new Button("scoreButton", "./gfx/score.png");
+        buttonReset2.position.x = -30;
+        buttonReset2.position.y = 2;
+        buttonReset2.position.z = 0 * 10;
+        this.boards.add(buttonReset2);
+        console.log(buttonReset2);
+        const buttonReset3 = new Button("helpButton", "./gfx/help.png");
+        buttonReset3.position.x = -30;
+        buttonReset3.position.y = 2;
+        buttonReset3.position.z = 1 * 10;
+        this.boards.add(buttonReset3);
+        console.log(buttonReset3);
     }
 
     createFloor = (floor, pieceH, level) => {
@@ -225,7 +242,7 @@ class Game {
         if (intersects[0].object.name != "clickable")
             return
         // lastHoveredPiece.position.y -= 0.2;
-        console.log(intersects[0].object.id);
+        console.log(intersects[0].object);
         let correctPieces = this.scene.children.filter(function (el) { return el.name == "clickable" })
         this.playerPiecesLeft = correctPieces
         nowClickedPositionLR = intersects[0].object.positionLR
@@ -248,14 +265,17 @@ class Game {
 
         let maxInControlRow = -10
         let minInControlRow = 10
+        let maxHeightControl = -1
 
         for (let i = 0; i < sameRowElements.length; i++) {
             if (sameRowElements[i].positionLR > maxInControlRow)
                 maxInControlRow = sameRowElements[i].positionLR
             if (sameRowElements[i].positionLR < minInControlRow)
                 minInControlRow = sameRowElements[i].positionLR
+            if (sameRowElements[i].positionHeight > maxHeightControl)
+                maxHeightControl = sameRowElements[i].positionHeight
         }
-        if (nowClickedPositionLR != maxInControlRow && nowClickedPositionLR != minInControlRow)
+        if (nowClickedPositionLR != maxInControlRow && nowClickedPositionLR != minInControlRow) // && sameRowElements[i].positionHeight != maxHeightControl
             return
         nowHoveredPiece = intersects[0].object;
         console.log(intersects[0].object)

@@ -7,6 +7,7 @@ class Button extends THREE.Mesh {
         this.topMaterialPath = topMaterialPath;
         this.geometry = new THREE.BoxGeometry(3, 1, 8);
         this.material = [];
+        this.name = "clickable";
         this.material.push(new THREE.MeshBasicMaterial({ side: THREE.DoubleSide, map: new THREE.TextureLoader().load('./gfx/side2.png') }));
         this.material.push(new THREE.MeshBasicMaterial({ side: THREE.DoubleSide, map: new THREE.TextureLoader().load('./gfx/side2.png') }));
         this.material.push(new THREE.MeshBasicMaterial({ side: THREE.DoubleSide, map: new THREE.TextureLoader().load(`${this.topMaterialPath}`) })); //zamiast ścieżki, zmienna przekazana
