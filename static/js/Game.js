@@ -368,7 +368,7 @@ class Game {
             lastClickedPieceImageObj = "" //w celu uniknięcia 3ciego kliku psującego
         wasSomethingClicked = false
         console.log(this.playerPiecesLeft);
-        if (this.playerPiecesLeft.length == 0) {
+        if (this.playerPiecesLeft.length == 142) {
             // alert("You WON!")
             this.hasGameEnded = true
         }

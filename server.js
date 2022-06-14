@@ -59,6 +59,13 @@ const images = [
 let doublePlayerGameboard = []
 let winner = "";
 
+const Datastore = require('nedb')
+
+const results = new Datastore({
+    filename: 'kolekcja.db',
+    autoload: true
+});
+
 function randomizeBoardImages() {
     const startingItemsArray = []
     const imagesLeft = []
@@ -118,6 +125,17 @@ app.get("/checkLogins", (req, res) => {
 app.get("/checkForWinner", (req, res) => {
     if (winner != "") {
         // console.log("Koniec wyslij mu info")
+        const doc = {
+            player1: users[0],
+            player2: users[1],
+            winner: "player" + winner
+        };
+
+        results.insert(doc, function (err, newDoc) {
+            console.log("dodano dokument (obiekt):")
+            console.log(newDoc)
+            console.log("losowe id dokumentu: " + newDoc._id)
+        });
         res.send(JSON.stringify({ winner: winner }))
     }
     else
@@ -138,3 +156,9 @@ app.get("/reset", (req, res) => {
     users = [];
     res.send(JSON.stringify({ hasGameStarted: false }))
 })
+
+
+
+
+
+
